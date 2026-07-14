@@ -15,5 +15,5 @@ jobs:
         with:
           python-version: "3.13"
           enable-cache: true
-      - run: uv run --no-sources ruff format --check .
-      - run: uv run --no-sources ruff check .
+      - run: uv run --no-sources --extra dev ruff format --check .
+      - run: uv run --no-sources --extra dev ruff check .
