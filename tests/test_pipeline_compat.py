@@ -16,20 +16,10 @@ def _write_dummy_sources(static_dir, version):
 
 
 def test_pipeline_bundle_compiles_in_order(settings, tmp_path):
-    from django.core.signals import setting_changed
-
     # pipeline.conf reads settings.PIPELINE at import time; the test project's
-    # base settings never define it, so seed an empty dict before the first import.
-    settings.PIPELINE = {}
+    # base settings (see conftest.py) define it as an empty dict so this import
+    # is always safe, regardless of import order across the test session.
     import pipeline.conf
-
-    # This installed pipeline version's reload_settings signal receiver assumes
-    # settings.PIPELINE is always a dict. pytest-django's fixture teardown eventually
-    # restores PIPELINE to "unset" (value=None), which crashes that receiver and fails
-    # this test at teardown. We re-read pipeline.conf.settings manually below instead
-    # of relying on the signal, so disconnect it -- no other test in this suite
-    # depends on pipeline's auto-reload-on-setting_changed behavior.
-    setting_changed.disconnect(pipeline.conf.reload_settings)
 
     version = "9.9.9"
     static_src = tmp_path / "static_src"

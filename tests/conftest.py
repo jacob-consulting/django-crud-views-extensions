@@ -40,5 +40,6 @@ def pytest_configure():
         CRUD_VIEWS_EXTENDS="base.html",
         CRISPY_ALLOWED_TEMPLATE_PACKS="bootstrap5",
         CRISPY_TEMPLATE_PACK="bootstrap5",
+        PIPELINE={},
     )
     django.setup()
