@@ -15,6 +15,9 @@ dev = [
     "pytest-django",
     "pytest-mock",
     "django-pipeline",
+    "pytest-cov",
+    "ruff",
+    "bump-my-version",
 ]
 
 [build-system]
@@ -37,3 +40,17 @@ indent-style = "space"
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers"
+
+[tool.coverage.run]
+source = ["crud_views_widget_datetimepicker"]
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = true
+tag_name = "v{new_version}"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = 'version = "{current_version}"'
+replace = 'version = "{new_version}"'
