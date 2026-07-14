@@ -27,10 +27,6 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["src/crud_views_widget_datetimepicker"]
 
-[tool.uv.sources]
-# Local development against the sibling checkout; releases use the PyPI pin above.
-django-crud-views = { path = "../django-crud-views", editable = true }
-
 [tool.ruff]
 line-length = 120
 
