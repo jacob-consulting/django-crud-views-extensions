@@ -28,5 +28,12 @@ packages = ["src/crud_views_widget_datetimepicker"]
 # Local development against the sibling checkout; releases use the PyPI pin above.
 django-crud-views = { path = "../django-crud-views", editable = true }
 
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
 [tool.pytest.ini_options]
 addopts = "--strict-markers"

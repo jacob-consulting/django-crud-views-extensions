@@ -42,7 +42,7 @@ def test_merge_precedence(settings):
     settings.CRUD_VIEWS_DATETIMEPICKER = {"DEFAULTS": {"step": 30, "format": "Y-m-d"}}
     cfg = _config(DateTimePickerInput(config={"step": 15}))
     assert cfg["format"] == "Y-m-d"  # settings DEFAULTS beat built-ins
-    assert cfg["step"] == 15         # per-field config beats settings DEFAULTS
+    assert cfg["step"] == 15  # per-field config beats settings DEFAULTS
 
 
 def test_no_media_class():
