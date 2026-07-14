@@ -226,7 +226,7 @@ wheels = [
 
 [[package]]
 name = "django-crud-views-extensions"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "django-crud-views" },
