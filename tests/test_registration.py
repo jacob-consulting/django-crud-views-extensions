@@ -3,6 +3,16 @@ from django.template import Context, Template
 from crud_views_widget_datetimepicker.checks import check_datetimepicker
 
 
+def _entry_path(entry) -> str:
+    """Path of a registered asset entry, across django-crud-views versions.
+
+    Bundles held plain strings up to 0.17; from the CSP release onwards they hold
+    ``Asset`` instances carrying optional SRI metadata, with the string on ``.path``.
+    We declare ``django-crud-views>=0.11.0``, so tests must read both.
+    """
+    return getattr(entry, "path", entry)
+
+
 def test_bundle_registered_at_startup():
     # conftest has no CRUD_VIEWS_DATETIMEPICKER -> CDN mode defaults applied in ready()
     from crud_views.lib.assets import get_registered
@@ -10,8 +20,8 @@ def test_bundle_registered_at_startup():
     bundles = {b.key: b for b in get_registered()}
     assert "datetimepicker" in bundles
     b = bundles["datetimepicker"]
-    assert b.js[0].startswith("https://cdn.jsdelivr.net/npm/jquery-datetimepicker@")
-    assert b.js[-1] == "crud_views_widget_datetimepicker/init.js"
+    assert _entry_path(b.js[0]).startswith("https://cdn.jsdelivr.net/npm/jquery-datetimepicker@")
+    assert _entry_path(b.js[-1]) == "crud_views_widget_datetimepicker/init.js"
     assert b.emit is True
 
 
