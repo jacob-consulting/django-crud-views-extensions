@@ -10,9 +10,9 @@ REPO_URL = "https://github.com/jacob-consulting/django-crud-views-extensions"
 #: public demo on Render (render.yaml), linked from the footer
 DEMO_URL = "https://django-crud-views-extensions-demo.onrender.com/"
 
-#: Read the Docs version linked from the example pages and the footer. "latest" (main) until RTD activates
-#: "stable" (it does on the next release tag); then switch to "stable", which is what the demo runs.
-DOCS_BASE = "https://django-crud-views-extensions.readthedocs.io/en/latest"
+#: Read the Docs version linked from the example pages and the footer. "stable" is the newest release tag,
+#: which is what the demo runs.
+DOCS_BASE = "https://django-crud-views-extensions.readthedocs.io/en/stable"
 
 #: the core package the extensions build on, linked from the home page and the footer
 CRUD_VIEWS_DOCS_URL = "https://django-crud-views.readthedocs.io/en/stable/"
