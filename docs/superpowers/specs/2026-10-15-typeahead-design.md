@@ -218,9 +218,11 @@ Rendered structure (default template):
   "N results", "Search failed", clear button label) are translatable and passed as
   data attributes / template text; the JS has no i18n of its own.
 
-Documented widget context for skins: `text_attrs`, `hidden_name`, `hidden_id`,
-`value`, `label`, `url`, `min_chars`, `debounce`, `submit_on_clear`, `listbox_id`,
-`hint_id`, `i18n` (dict).
+Documented widget context for skins: `widget.attrs` (the visible input's attributes:
+id, ARIA, merged `aria-describedby`) and `widget.typeahead` with `url`, `label`, `value`,
+`hidden_name`, `hidden_id`, `listbox_id`, `hint_id`, `min_chars`, `debounce`,
+`submit_on_clear`, `i18n` (dict: `hint`, `more`, `none`, `count`, `error`, `clear`,
+`listbox`; `{n}` is the number placeholder).
 
 ## 3. Frontend, skins, asset delivery
 
