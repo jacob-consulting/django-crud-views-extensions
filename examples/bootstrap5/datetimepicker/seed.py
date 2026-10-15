@@ -26,6 +26,15 @@ def _time(text: str) -> datetime.time:
 
 
 def seed():
+    seed_events()
+    seed_variants()
+
+
+def seed_events():
+    # days are relative to the current month: seed once, or a later run (task run seeds on every start) would add a
+    # second set of events in the new month
+    if Event.objects.exists():
+        return
     tz = timezone.get_current_timezone()
     first = timezone.localdate().replace(day=1)
     for title, offset, doors, start, hours in EVENTS:
@@ -40,7 +49,6 @@ def seed():
                 "ends_at": starts_at + datetime.timedelta(hours=hours) if hours else None,
             },
         )
-    seed_variants()
 
 
 def seed_variants():

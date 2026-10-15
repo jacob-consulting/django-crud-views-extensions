@@ -1,6 +1,7 @@
 import datetime
 import json
 import re
+from unittest import mock
 
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
@@ -190,6 +191,15 @@ class EventFilterTest(EventTestCase):
 
 
 class EventSeedTest(TestCase):
+    def test_seed_in_a_later_month_adds_no_events(self):
+        """task run seeds on every start; days are relative to the current month, so a re-seed in a later
+        month must not add a second set of events."""
+        call_command("seed", verbosity=0)
+        count = Event.objects.count()
+        with mock.patch("datetimepicker.seed.timezone.localdate", return_value=datetime.date(2027, 3, 2)):
+            call_command("seed", verbosity=0)
+        self.assertEqual(Event.objects.count(), count)
+
     def test_seed_is_idempotent(self):
         call_command("seed", verbosity=0)
         count = Event.objects.count()
