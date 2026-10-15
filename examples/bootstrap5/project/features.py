@@ -36,6 +36,25 @@ class Feature:
 
 FEATURES: list[Feature] = [
     # example feature apps append their entries here
+    Feature(
+        app="datetimepicker",
+        viewset="event",
+        group="widgets",
+        title="Datetimepicker: forms, modals & filters",
+        description="Date, time and datetime pickers on create/update forms, in a modal, and as list filters.",
+        about=(
+            "The everyday use of crud_views_widget_datetimepicker. The event form uses DatePickerInput, "
+            "TimePickerInput and DateTimePickerInput; nothing else is configured — the plugin and init.js reach "
+            "every page through {% cv_js %} / {% cv_css %}. Open “Quick edit” on a row to see the same form in a "
+            "crud_views modal, and use the day range above the table to filter with the same widgets."
+        ),
+        look_at=(
+            "EventForm.Meta.widgets and EventFilter in forms.py; EventQuickEditView (cv_modal = True) in views.py; "
+            "CRUD_VIEWS_DATETIMEPICKER in project/settings.py."
+        ),
+        url_name="event-list",
+        icon="fa-regular fa-calendar",
+    ),
 ]
 
 

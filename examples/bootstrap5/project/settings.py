@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     "crud_views_widget_datetimepicker.apps.CrudViewsWidgetDatetimepickerConfig",
     "project",
     # example feature apps (one per crud_views_widget_* extension)
+    "datetimepicker",
 ]
 
 MIDDLEWARE = [

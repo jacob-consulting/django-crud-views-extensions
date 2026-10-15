@@ -26,3 +26,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # example feature apps append their include() here
 ]
+
+urlpatterns += [path("datetimepicker/", include("datetimepicker.urls"))]
