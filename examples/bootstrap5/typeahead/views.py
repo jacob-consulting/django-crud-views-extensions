@@ -18,7 +18,7 @@ from crud_views.lib.viewset import ParentViewSet, ViewSet
 from crud_views_object_detail.lib import ObjectDetailViewPermissionRequired
 from project.views import BreadcrumbMixin
 
-from typeahead.forms import TaskFilter, TaskFilterFormHelper, TaskForm
+from typeahead.forms import TaskFilter, TaskFilterFormHelper, TaskForm, TaskPickForm
 from typeahead.models import Task, Team
 
 # --------------------------------------------------------------------------- Team
@@ -63,7 +63,7 @@ class TaskListView(BreadcrumbMixin, ListViewTableMixin, ListViewTableFilterMixin
     table_class = TaskTable
     filterset_class = TaskFilter
     formhelper_class = TaskFilterFormHelper
-    cv_list_actions = ["detail", "update", "quick_assign", "delete"]
+    cv_list_actions = ["detail", "update", "quick_assign", "pick_assignee", "delete"]
 
 
 class TaskDetailView(BreadcrumbMixin, ObjectDetailViewPermissionRequired):
@@ -100,6 +100,32 @@ class TaskQuickAssignView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, Custom
     cv_action_short_label_template_code = _("Quick assign")
     cv_header_template_code = _("Assign “{{ object }}”")
     cv_paragraph_template_code = _("The same form as the update page, opened in a modal.")
+    cv_message_template_code = _("Updated task “{{ object }}”")
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["instance"] = self.object
+        return kwargs
+
+    def cv_form_valid(self, context: dict):
+        context["form"].save()
+
+
+class TaskPickAssigneeView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, CustomFormViewPermissionRequired):
+    """TypeaheadSelect in a crud_views modal: typeahead-select.js initialises on cv:modal:loaded, the popup lives
+    inside the widget (not in <body>), and Escape closes only the popup."""
+
+    cv_viewset = cv_task
+    cv_key = "pick_assignee"
+    cv_path = "pick-assignee"
+    cv_permission = "change"
+    cv_modal = True
+    form_class = TaskPickForm
+    cv_icon_action = "fa-solid fa-hand-pointer"
+    cv_action_label_template_code = _("Pick assignee")
+    cv_action_short_label_template_code = _("Pick assignee")
+    cv_header_template_code = _("Pick an assignee for “{{ object }}”")
+    cv_paragraph_template_code = _("The select popup: browse the team's members, scroll for more, or search.")
     cv_message_template_code = _("Updated task “{{ object }}”")
 
     def get_form_kwargs(self):

@@ -31,3 +31,15 @@ def team_members(request, team):
 def any_member(request):
     _check(request)
     return get_user_model().objects.filter(teams__isnull=False).distinct()
+
+
+class DemoBrowseLookup(DemoUserLookup):
+    """The select popup lists the first members on open (min_chars = 0) and loads more on scroll."""
+
+    min_chars = 0
+
+
+@register_user_lookup("typeahead.team_members_browse", base=DemoBrowseLookup)
+def team_members_browse(request, team):
+    _check(request)
+    return get_object_or_404(Team, pk=team).members.all()
