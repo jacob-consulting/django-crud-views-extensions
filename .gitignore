@@ -5,3 +5,4 @@ dist/
 .pytest_cache/
 .idea/
 examples/**/db.sqlite3
+site/

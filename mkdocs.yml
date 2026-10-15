@@ -1,0 +1,17 @@
+site_name: Django CRUD Views Extensions
+theme: readthedocs
+plugins:
+    - search
+    - awesome-pages
+repo_url: https://github.com/jacob-consulting/django-crud-views-extensions
+edit_uri: blob/main/docs/
+
+exclude_docs: |
+    superpowers/
+    requirements.*
+
+markdown_extensions:
+    - admonition
+
+validation:
+    anchors: warn
