@@ -36,6 +36,7 @@ def pytest_configure():
             }
         ],
         STATIC_URL="/static/",
+        ROOT_URLCONF="tests.urls",
         LANGUAGE_CODE="de-de",
         USE_TZ=True,
         DATABASES={"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}},
