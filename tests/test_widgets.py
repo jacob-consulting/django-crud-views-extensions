@@ -199,3 +199,11 @@ def test_per_field_lang_wins(settings):
     settings.CRUD_VIEWS_DATETIMEPICKER = {"LANG": "fr"}
     with translation.override("de"):
         assert _config(DatePickerInput(config={"lang": "en"}))["lang"] == "en"
+
+
+def test_unconvertible_django_format_leaves_picker_default():
+    """A Django format the picker cannot reproduce: no picker format, Django renders as usual."""
+    with translation.override("en"):
+        rendered = _rendered(DatePickerInput(format="%b %d, %Y"), DAY)
+    assert "format" not in rendered["config"]
+    assert rendered["value"] == "Oct 15, 2026"

@@ -28,7 +28,8 @@ class XdsoftConfigMixin:
 
     ``format`` comes from (highest first): an explicit picker ``format`` (settings
     DEFAULTS or per-field config), the Django ``format=`` widget argument, the active
-    locale's input formats (``format_key``), ``fallback_format``."""
+    locale's input formats (``format_key``), ``fallback_format``. A Django ``format=``
+    the picker cannot reproduce leaves the picker on its own default."""
 
     defaults: dict = {}
     fallback_format: str = ""  # strftime; every Django locale accepts it
@@ -53,12 +54,14 @@ class XdsoftConfigMixin:
         merged.update(cfg.defaults)
         merged.update(self.picker_config)
         if "format" not in merged:
-            merged["format"] = strftime_to_php(self.format or self.locale_format())
+            picker_format = strftime_to_php(self.format or self.locale_format())
+            if picker_format:  # else: picker default; Django renders/parses self.format natively
+                merged["format"] = picker_format
         return merged
 
     def strftime_format(self, config: dict) -> str | None:
         """The Python format matching the picker's, or None if the picker format has no equivalent."""
-        return php_to_strftime(config["format"])
+        return php_to_strftime(config["format"]) if config.get("format") else None
 
     def get_context(self, name, value, attrs):
         config = self.get_picker_config()
