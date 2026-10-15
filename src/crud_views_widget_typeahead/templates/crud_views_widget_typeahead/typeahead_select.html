@@ -1,0 +1,11 @@
+{% with ta=widget.typeahead %}<div class="cv-typeahead-select" data-cv-typeahead-select data-url="{{ ta.url }}" data-min-chars="{{ ta.min_chars }}" data-debounce="{{ ta.debounce }}" data-page-size="{{ ta.page_size }}" data-submit-on-clear="{{ ta.submit_on_clear|yesno:'true,false' }}" data-i18n-none="{{ ta.i18n.none }}" data-i18n-count="{{ ta.i18n.count }}" data-i18n-error="{{ ta.i18n.error }}" data-i18n-loading="{{ ta.i18n.loading }}" data-i18n-type-more="{{ ta.i18n.type_more }}" data-i18n-placeholder="{{ ta.i18n.placeholder }}">
+  <button type="button"{% include "django/forms/widgets/attrs.html" %}><span id="{{ ta.label_id }}" class="cv-typeahead-select-label{% if not ta.value %} cv-typeahead-select-placeholder{% endif %}" data-cv-typeahead-select-label>{% if ta.value %}{{ ta.label }}{% else %}{{ ta.i18n.placeholder }}{% endif %}</span></button>
+  <button type="button" class="btn-close cv-typeahead-select-clear" data-cv-typeahead-select-clear aria-label="{{ ta.i18n.clear }}"{% if not ta.value %} hidden{% endif %}></button>
+  <input type="hidden" name="{{ ta.hidden_name }}" id="{{ ta.hidden_id }}" value="{{ ta.value }}" autocomplete="off">
+  <div id="{{ ta.popup_id }}" class="cv-typeahead-select-popup" data-cv-typeahead-select-popup hidden>
+    <div class="px-2 pb-2"><input type="search" id="{{ ta.search_id }}" class="form-control form-control-sm" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="{{ ta.listbox_id }}" aria-label="{{ ta.i18n.search }}" autocomplete="off"></div>
+    <ul id="{{ ta.listbox_id }}" tabindex="-1" class="dropdown-menu show list-unstyled cv-typeahead-select-list" role="listbox" aria-label="{{ ta.i18n.listbox }}"></ul>
+  </div>
+  <span id="{{ ta.hint_id }}" class="visually-hidden">{{ ta.i18n.hint }}</span>
+  <span class="visually-hidden" aria-live="polite" data-cv-typeahead-select-status></span>
+</div>{% endwith %}

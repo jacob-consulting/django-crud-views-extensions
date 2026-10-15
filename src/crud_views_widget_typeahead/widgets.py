@@ -1,4 +1,4 @@
-"""Typeahead input widget.
+"""Typeahead widgets: TypeaheadInput (text input) and TypeaheadSelect (select-style popup).
 
 Renders a visible text input without a name (the label), a hidden input carrying the name and the pk,
 and data attributes for the frontend. No Media class on purpose: typeahead.js/.css are page-global via
@@ -113,4 +113,65 @@ class TypeaheadInput(forms.Widget):
             "submit_on_clear": self.submit_on_clear,
             "i18n": _i18n(lookup.min_chars),
         }
+        return context
+
+
+def _select_i18n(min_chars: int) -> dict:
+    return {
+        "hint": gettext("Open with Enter or the arrow keys, type to search, choose with Enter."),
+        "placeholder": gettext("Select…"),
+        "search": gettext("Search"),
+        "loading": gettext("Loading…"),
+        "type_more": ngettext(
+            "Type at least %(count)d character.",
+            "Type at least %(count)d characters.",
+            min_chars,
+        )
+        % {"count": min_chars},
+    }
+
+
+class TypeaheadSelect(TypeaheadInput):
+    """Select-style popup: a trigger button that looks like a Bootstrap <select>, and a popup with a search field
+    and a server-paged list. Same binding, hidden-input contract and endpoint as TypeaheadInput; its own template
+    (SELECT_TEMPLATE) and its own frontend (typeahead-select.js, asset bundle "typeahead_select")."""
+
+    @property
+    def template_name(self) -> str:
+        return self._template_name or get_config().select_template
+
+    @template_name.setter
+    def template_name(self, value: str | None):
+        self._template_name = value
+
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        widget = context["widget"]
+        typeahead = widget["typeahead"]
+        button = widget["attrs"]  # widget.attrs land on the trigger button
+        text_id = button["id"]
+        for key in ("role", "aria-autocomplete", "autocomplete"):  # text-input semantics, not a button's
+            button.pop(key, None)
+        classes = [c for c in str(button.get("class") or "").split() if c != "form-control"]
+        button.update(
+            {
+                "class": " ".join(dict.fromkeys([*classes, "form-select", "text-start"])),
+                "aria-haspopup": "listbox",
+                "aria-expanded": "false",
+                "aria-controls": f"{text_id}_popup",
+                # <label for> would replace the button's content as its name: self-reference yields the label text,
+                # then the value/placeholder span (APG select-only combobox pattern)
+                "aria-labelledby": f"{text_id} {text_id}_label",
+            }
+        )
+        lookup = get_lookup(self.binding.lookup_name)
+        typeahead.update(
+            {
+                "popup_id": f"{text_id}_popup",
+                "label_id": f"{text_id}_label",
+                "search_id": f"{text_id}_search",
+                "page_size": lookup.max_results,
+                "i18n": {**typeahead["i18n"], **_select_i18n(lookup.min_chars)},
+            }
+        )
         return context

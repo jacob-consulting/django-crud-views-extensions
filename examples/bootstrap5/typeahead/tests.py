@@ -25,6 +25,18 @@ def typeahead(markup: str, name: str) -> dict:
     }
 
 
+def typeahead_select(markup: str, name: str) -> dict:
+    """data-url, trigger label and hidden value of the rendered select popup for field ``name``."""
+    block = re.search(rf'<div class="cv-typeahead-select".*?name="{name}"[^>]*>', markup, re.S).group(0)
+    label = re.search(r"<span[^>]*data-cv-typeahead-select-label[^>]*>(.*?)</span>", block, re.S).group(1)
+    value = re.search(rf'<input type="hidden" name="{name}"[^>]*value="([^"]*)"', block).group(1)
+    return {
+        "url": html.unescape(re.search(r'data-url="([^"]*)"', block).group(1)),
+        "label": html.unescape(label),
+        "value": html.unescape(value),
+    }
+
+
 class TypeaheadTestCase(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -114,12 +126,59 @@ class TaskFilterTest(TypeaheadTestCase):
         self.assertContains(resp, "Fix login")
         self.assertNotContains(resp, "Write docs")
 
+    def test_filter_renders_the_popup_with_the_label(self):
+        markup = self.client.get(self.url("list"), {"assignee": self.member.pk}).content.decode()
+        found = typeahead_select(markup, "assignee")
+        self.assertEqual((found["label"], found["value"]), ("Mia Member (t-member)", str(self.member.pk)))
+        self.assertIn('data-submit-on-clear="true"', markup)
+        self.assertIn("crud_views_widget_typeahead/typeahead-select.js", markup)
+
     def test_filter_offers_members_of_any_team(self):
         markup = self.client.get(self.url("list"), follow=True).content.decode()
-        body = self.client.get(typeahead(markup, "assignee")["url"] + "&q=mia").json()
+        body = self.client.get(typeahead_select(markup, "assignee")["url"] + "&q=mia").json()
         self.assertEqual(
             sorted(r["label"] for r in body["results"]), ["Mia Member (t-member)", "Mia Outsider (t-outsider)"]
         )
+
+    def test_filter_needs_two_characters(self):
+        markup = self.client.get(self.url("list"), follow=True).content.decode()
+        self.assertEqual(self.client.get(typeahead_select(markup, "assignee")["url"] + "&q=m").json()["count"], 0)
+
+
+class TaskPickModalTest(TypeaheadTestCase):
+    def test_list_offers_pick_assignee(self):
+        self.assertContains(self.client.get(self.url("list")), self.url("pick_assignee", pk=self.task.pk))
+
+    def test_modal_partial_contains_the_popup(self):
+        resp = self.client.get(self.url("pick_assignee", pk=self.task.pk), HTTP_X_CV_MODAL="true")
+        self.assertEqual(resp.status_code, 200)
+        markup = resp.content.decode()
+        self.assertNotIn("<html", markup)
+        found = typeahead_select(markup, "assignee")
+        self.assertEqual((found["label"], found["value"]), ("Mia Member (t-member)", str(self.member.pk)))
+
+    def test_popup_browses_team_members_without_a_query(self):
+        markup = self.client.get(self.url("pick_assignee", pk=self.task.pk), HTTP_X_CV_MODAL="true").content.decode()
+        url = typeahead_select(markup, "assignee")["url"]
+        body = self.client.get(f"{url}&q=&page=1").json()
+        self.assertEqual([r["label"] for r in body["results"]], ["Mia Member (t-member)"])
+        self.assertEqual(body["count"], 1)
+
+    def test_valid_modal_post_answers_204(self):
+        resp = self.client.post(
+            self.url("pick_assignee", pk=self.other_task.pk), {"assignee": self.member.pk}, HTTP_X_CV_MODAL="true"
+        )
+        self.assertEqual(resp.status_code, 204)
+        self.other_task.refresh_from_db()
+        self.assertEqual(self.other_task.assignee, self.member)
+
+    def test_outsider_is_rejected(self):
+        resp = self.client.post(
+            self.url("pick_assignee", pk=self.other_task.pk), {"assignee": self.outsider.pk}, HTTP_X_CV_MODAL="true"
+        )
+        self.assertEqual(resp.status_code, 422)  # crud_views re-renders an invalid modal form as 422
+        self.other_task.refresh_from_db()
+        self.assertIsNone(self.other_task.assignee)
 
 
 class AboutTest(TypeaheadTestCase):
