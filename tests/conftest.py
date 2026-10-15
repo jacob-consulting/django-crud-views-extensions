@@ -19,6 +19,8 @@ def pytest_configure():
             "crispy_bootstrap5",
             "crud_views.apps.CrudViewsConfig",
             "crud_views_widget_datetimepicker.apps.CrudViewsWidgetDatetimepickerConfig",
+            "django_filters",
+            "crud_views_widget_typeahead.apps.CrudViewsWidgetTypeaheadConfig",
         ],
         TEMPLATES=[
             {
