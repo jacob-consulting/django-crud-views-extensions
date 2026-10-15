@@ -98,3 +98,16 @@ the same path list the app uses internally — then switch off tag emission:
 
 Keep the order jQuery → plugin → init.js in your bundle (`source_files()` already
 returns plugin before init.js).
+
+## Example app
+
+`examples/bootstrap5/` is a local Django project with one page per use case
+(forms, modal, list filters, per-field config). It runs against the code in `src/`.
+
+```bash
+cd examples/bootstrap5
+task run        # migrate, seed, runserver on :8000 — log in as admin/admin
+task test       # the example's own tests
+```
+
+Without [Task](https://taskfile.dev): `uv run manage.py migrate && uv run manage.py seed && uv run manage.py runserver`.

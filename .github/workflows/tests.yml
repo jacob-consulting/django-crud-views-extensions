@@ -19,6 +19,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - run: uv run --no-sources --extra dev pytest --cov=crud_views_widget_datetimepicker --cov-report=xml
+      - name: Example app tests
+        working-directory: examples/bootstrap5
+        run: uv run --no-sources --extra dev pytest
       - uses: codecov/codecov-action@v5
         if: matrix.python-version == '3.13'
         with:

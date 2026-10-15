@@ -26,6 +26,18 @@ uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)
 ```
 
+### Example app
+
+```bash
+cd examples/bootstrap5 && task run     # migrate + seed (admin/admin) + runserver
+cd examples/bootstrap5 && uv run pytest
+```
+
+Lives in the repo's uv env (no own pyproject). Root `uv run pytest` does **not** collect it
+(`testpaths = ["tests"]`); CI runs it as a separate step. New `crud_views_widget_*` apps
+add one example app plus `Feature` entries in `project/features.py` (matched to pages by
+`Feature.viewset`).
+
 Tests need **no** `DJANGO_SETTINGS_MODULE`: `tests/conftest.py::pytest_configure` calls
 `settings.configure()` directly. It sets `LANGUAGE_CODE="de-de"` and seeds `PIPELINE={}`
 (the empty dict matters — it keeps django-pipeline's global `setting_changed` receiver
