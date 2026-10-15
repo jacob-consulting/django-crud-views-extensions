@@ -1,7 +1,7 @@
 /*
  * crud_views_widget_typeahead — default frontend (vanilla JS, Bootstrap 5 markup).
  *
- * Contract (see README "Skins"): the visible input shows the label of the pk in the hidden input, except
+ * Contract (see docs/reference/typeahead/skins.md): the visible input shows the label of the pk in the hidden input, except
  * while typing. Arrow keys preview text only; Enter selects when the list is open and never submits then.
  * Option text is built from text nodes and <mark> elements, never parsed from HTML strings.
  *

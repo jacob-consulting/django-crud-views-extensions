@@ -2,7 +2,8 @@
 
 Renders a visible text input without a name (the label), a hidden input carrying the name and the pk,
 and data attributes for the frontend. No Media class on purpose: typeahead.js/.css are page-global via
-cv_js/cv_css. The template (and with it the whole frontend) is swappable: see the README's skin contract.
+cv_js/cv_css. The template (and with it the whole frontend) is swappable: see the skin contract in
+docs/reference/typeahead/skins.md.
 """
 
 from dataclasses import dataclass

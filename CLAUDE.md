@@ -25,7 +25,18 @@ uv run pytest                          # full suite (223 tests, ~0.46s)
 uv run pytest tests/test_widgets.py    # one file
 uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)
+uv run --no-project --with-requirements docs/requirements.txt mkdocs serve -a localhost:8001   # docs preview
+uv run --no-project --with-requirements docs/requirements.txt mkdocs build --strict            # docs build (CI)
 ```
+
+### Docs
+
+MkDocs site on Read the Docs (`mkdocs.yml`, `.readthedocs.yaml`), `readthedocs` theme, nav order via
+awesome-pages `.pages` files. User documentation lives in `docs/` (getting_started, reference per app,
+development); the README is only an overview linking there. `docs/superpowers/` and `docs/requirements.*` are
+excluded via `exclude_docs`. Build deps are hash-locked: edit `docs/requirements.in`, then
+`uv pip compile --universal --generate-hashes --python-version 3.12 docs/requirements.in -o docs/requirements.txt`.
+The definition-list extension is not enabled: use `###` subheadings, not `term\n:   text`.
 
 ### Example app
 
@@ -103,7 +114,7 @@ time).
   `do_not_call_in_templates = True` under crud_views (its list template evaluates `view.filterset_class`).
 - **`widgets.py`** — visible input has no `name`; hidden input carries the pk; `aria-describedby` is merged
   with Django's ids at render time (never set on `widget.attrs`, or Django drops its own).
-- **`static/.../typeahead.js`** — vanilla, no `innerHTML`; the skin contract is documented in the README.
+- **`static/.../typeahead.js`** — vanilla, no `innerHTML`; the skin contract is documented in `docs/reference/typeahead/skins.md`.
   No CDN/vendor machinery: there is no third-party plugin.
 - **`TypeaheadSelect`** (`widgets.py`) + `typeahead_select.html` + `static/.../typeahead-select.js`/`.css` — the
   select popup: trigger button, popup with search field and scroll-paged list, rendered inside the widget (a

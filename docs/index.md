@@ -23,14 +23,21 @@ Form widgets wrapping the [xdsoft jQuery DateTimePicker](https://github.com/xdan
 `DateTimePickerInput`, `DatePickerInput` and `TimePickerInput`. The plugin loads from a CDN or from vendored
 static files, and the picker format follows the locale of the current request.
 
+[Get started](getting_started/datetimepicker.md) · [Reference](reference/datetimepicker/widgets.md)
+
 ### crud_views_widget_typeahead
 
 A server-backed type-ahead single select for large, permission-sensitive model choice sets (thousands of
 users), for forms and django-filter filters. It comes as a text typeahead and as a select-style popup. Vanilla
 JS, no jQuery, CSP-safe, ARIA combobox.
 
+[Get started](getting_started/typeahead.md) · [Reference](reference/typeahead/lookups.md)
+
 ## Install
 
 ```bash
 pip install django-crud-views-extensions
 ```
+
+Then follow [Getting started](getting_started/index.md). The [example app](getting_started/example_app.md) shows
+every feature in a running project; [Development](development/index.md) covers contributing.
