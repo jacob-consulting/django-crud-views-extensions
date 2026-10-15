@@ -7,9 +7,15 @@ from django import forms
 from crud_views_widget_typeahead.fields import TypeaheadField
 from crud_views_widget_typeahead.filters import TypeaheadFilter
 
+from projects.models import Task
+
 
 class TaskForm(forms.ModelForm):
     assignee = TypeaheadField(lookup="projects.members")
+
+    class Meta:
+        model = Task
+        fields = ["title", "assignee"]
 
     def __init__(self, *args, request, project, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,9 +27,13 @@ class TaskFilter(django_filters.FilterSet):
 
     do_not_call_in_templates = True  # see below
 
-    def __init__(self, *args, **kwargs):
+    class Meta:
+        model = Task
+        fields = []
+
+    def __init__(self, *args, project, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filters["assignee"].bind(self.request, project=str(self.project.pk))
+        self.filters["assignee"].bind(self.request, project=str(project.pk))
 ```
 
 `TypeaheadField` is a `ModelChoiceField` whose queryset comes from a [lookup](lookups.md);
@@ -51,9 +61,11 @@ crud_views' `CrispyModelForm` has the view at `self.cv_view`, so take the reques
 from crud_views.lib.crispy import CrispyModelForm
 from crud_views_widget_typeahead.fields import TypeaheadField
 
+from projects.models import Task
+
 
 class TaskForm(CrispyModelForm):
-    assignee = TypeaheadField(lookup="typeahead.team_members", required=False)
+    assignee = TypeaheadField(lookup="projects.members", required=False)
 
     class Meta:
         model = Task
@@ -61,8 +73,8 @@ class TaskForm(CrispyModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        team = self.cv_view.cv_get_parent_object()  # the team from the URL
-        self.fields["assignee"].bind(self.cv_view.request, team=str(team.pk))
+        project = self.cv_view.cv_get_parent_object()  # the project from the URL
+        self.fields["assignee"].bind(self.cv_view.request, project=str(project.pk))
 ```
 
 ## Filters

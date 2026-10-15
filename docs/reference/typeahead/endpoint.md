@@ -6,7 +6,10 @@ One generic JSON endpoint serves every lookup. Mount it under any prefix:
 # urls.py
 from django.urls import include, path
 
-urlpatterns += [path("_typeahead/", include("crud_views_widget_typeahead.urls"))]
+urlpatterns = [
+    # ...
+    path("_typeahead/", include("crud_views_widget_typeahead.urls")),
+]
 ```
 
 The URL name is `crud_views_typeahead:lookup`. The widgets build their URL from it, so you never write it
@@ -41,7 +44,8 @@ Responses are never cached. Other methods than `GET` get `405`.
 
 ## Errors
 
-Errors are JSON too — `fetch()` must never receive a login page — and never echo exception messages.
+Errors are JSON too — `fetch()` must never receive a login page — and never echo exception messages. The one
+exception is `405`, Django's standard empty response for a wrong method.
 
 | Status | Body | When |
 |---|---|---|

@@ -9,8 +9,8 @@ from crud_views_widget_typeahead.assets import select_source_files, source_files
 _ta = source_files()
 _tas = select_source_files()  # only if you use TypeaheadSelect
 PIPELINE = {
-    "JAVASCRIPT": {"main": {"source_filenames": [..., *_ta["js"], *_tas["js"]], ...}},
-    "STYLESHEETS": {"main": {"source_filenames": [..., *_ta["css"], *_tas["css"]], ...}},
+    "JAVASCRIPT": {"main": {"source_filenames": [*_ta["js"], *_tas["js"]], "output_filename": "js/main.js"}},
+    "STYLESHEETS": {"main": {"source_filenames": [*_ta["css"], *_tas["css"]], "output_filename": "css/main.css"}},
 }
 CRUD_VIEWS_TYPEAHEAD = {"EMIT": False, "SELECT_EMIT": False}
 ```

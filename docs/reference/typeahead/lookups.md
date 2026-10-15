@@ -64,6 +64,8 @@ from django.shortcuts import get_object_or_404
 
 from crud_views_widget_typeahead.lookups import register_user_lookup
 
+from projects.models import Project
+
 
 @register_user_lookup("projects.members")
 def members(request, project):
@@ -90,8 +92,8 @@ class UserWithUsernameLookup(UserLookup):
         return f"{obj.get_full_name() or obj.get_username()} ({obj.get_username()})"
 
 
-@register_user_lookup("projects.members", base=UserWithUsernameLookup)
-def members(request, project): ...
+@register_user_lookup("projects.members_with_username", base=UserWithUsernameLookup)
+def members_with_username(request, project): ...
 ```
 
 !!! warning

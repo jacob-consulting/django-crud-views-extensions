@@ -10,7 +10,10 @@
 | `TimePickerInput` | `TimeField` | `{"timepicker": True, "datepicker": False}` |
 
 ```python
+from crud_views.lib.crispy import CrispyModelForm
 from crud_views_widget_datetimepicker.widgets import DateTimePickerInput, DatePickerInput, TimePickerInput
+
+from appointments.models import Appointment
 
 
 class AppointmentForm(CrispyModelForm):

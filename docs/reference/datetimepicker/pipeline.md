@@ -5,14 +5,20 @@ CDN mode cannot be bundled. For [django-pipeline](https://django-pipeline.readth
 the app's own tag output with `EMIT: False`:
 
 ```python
+# settings.py (BASE_DIR as defined by Django's project template)
 from crud_views_widget_datetimepicker.assets import source_files
 
 _dtp = source_files("2.5.21", minified=False)   # pipeline minifies itself
 PIPELINE = {
-    "JAVASCRIPT": {"main": {"source_filenames": [..., *_dtp["js"]], ...}},
-    "STYLESHEETS": {"main": {"source_filenames": [..., *_dtp["css"]], ...}},
+    "JAVASCRIPT": {
+        "main": {
+            "source_filenames": ["js/jquery.min.js", *_dtp["js"]],  # jQuery first
+            "output_filename": "js/main.js",
+        }
+    },
+    "STYLESHEETS": {"main": {"source_filenames": [*_dtp["css"]], "output_filename": "css/main.css"}},
 }
-CRUD_VIEWS_DATETIMEPICKER = {"SOURCE": "vendored", "VENDOR_DIR": ..., "EMIT": False}
+CRUD_VIEWS_DATETIMEPICKER = {"SOURCE": "vendored", "VENDOR_DIR": BASE_DIR / "vendored_static", "EMIT": False}
 ```
 
 ## Path functions

@@ -3,6 +3,10 @@
 Given a model with date, time and datetime fields:
 
 ```python
+# events/models.py
+from django.db import models
+
+
 class Event(models.Model):
     title = models.CharField(max_length=100)
     day = models.DateField()
@@ -13,8 +17,11 @@ class Event(models.Model):
 pick the matching widget per field:
 
 ```python
+# events/forms.py
 from crud_views.lib.crispy import CrispyModelForm
 from crud_views_widget_datetimepicker.widgets import DatePickerInput, DateTimePickerInput, TimePickerInput
+
+from events.models import Event
 
 
 class EventForm(CrispyModelForm):

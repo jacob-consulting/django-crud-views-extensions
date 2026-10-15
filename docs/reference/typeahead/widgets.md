@@ -9,6 +9,8 @@ endpoint. Choose one per field; both can appear on one page.
 | `TypeaheadSelect` | a Bootstrap `<select>` opening a popup with a search field and a scroll-paged list | users want to browse |
 
 ```python
+from crud_views_widget_typeahead.fields import TypeaheadField
+from crud_views_widget_typeahead.filters import TypeaheadFilter
 from crud_views_widget_typeahead.widgets import TypeaheadSelect
 
 assignee = TypeaheadField(lookup="projects.members", widget=TypeaheadSelect())

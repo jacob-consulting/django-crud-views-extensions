@@ -22,6 +22,12 @@ dependencies = [
     "django-crud-views>=0.29.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/jacob-consulting/django-crud-views-extensions"
+Documentation = "https://django-crud-views-extensions.readthedocs.io/en/latest/"
+Repository = "https://github.com/jacob-consulting/django-crud-views-extensions.git"
+Issues = "https://github.com/jacob-consulting/django-crud-views-extensions/issues"
+
 [project.optional-dependencies]
 dev = [
     "pytest",

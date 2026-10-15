@@ -39,8 +39,11 @@ def team_members(request, team):
 ## 3. Bind a form field
 
 ```python
+# teams/forms.py
 from crud_views.lib.crispy import CrispyModelForm
 from crud_views_widget_typeahead.fields import TypeaheadField
+
+from teams.models import Task
 
 
 class TaskForm(CrispyModelForm):
@@ -61,11 +64,14 @@ be JSON values, hence `str(team.pk)`. See [Fields & filters](../reference/typeah
 
 ## 4. Bind a filter
 
-```python
-import django_filters
-from django.contrib.auth import get_user_model
+A filter over all tasks needs a lookup over every team member. Add it to `typeahead.py`:
 
-from crud_views_widget_typeahead.filters import TypeaheadFilter
+```python
+# teams/typeahead.py (continued)
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+
+from crud_views_widget_typeahead.lookups import register_user_lookup
 
 
 @register_user_lookup("teams.any_member")
@@ -73,6 +79,17 @@ def any_member(request):
     if not request.user.has_perm("teams.view_team"):
         raise PermissionDenied
     return get_user_model().objects.filter(teams__isnull=False).distinct()
+```
+
+and bind it in the FilterSet:
+
+```python
+# teams/filters.py
+import django_filters
+
+from crud_views_widget_typeahead.filters import TypeaheadFilter
+
+from teams.models import Task
 
 
 class TaskFilter(django_filters.FilterSet):
@@ -90,13 +107,12 @@ class TaskFilter(django_filters.FilterSet):
         self.filters["assignee"].bind(self.request)
 ```
 
-(The lookup goes into `typeahead.py` with the other one.)
-
 ## 5. Try the select popup
 
 For browsing instead of typing, swap the widget:
 
 ```python
+from crud_views_widget_typeahead.fields import TypeaheadField
 from crud_views_widget_typeahead.widgets import TypeaheadSelect
 
 assignee = TypeaheadField(lookup="teams.members", widget=TypeaheadSelect(), required=False)

@@ -16,7 +16,7 @@ CRUD_VIEWS_DATETIMEPICKER = {
 
 | Key | Default | Meaning |
 |---|---|---|
-| `SOURCE` | `"cdn"` | `"cdn"` or `"vendored"` ([vendored mode](vendored.md)); anything else raises [`crud_views.E333`](checks.md) |
+| `SOURCE` | `"cdn"` | `"cdn"` or `"vendored"` ([vendored mode](vendored.md)); anything else is reported by the system check [`crud_views.E333`](checks.md) |
 | `VERSION` | `"2.5.21"` | pinned upstream jquery-datetimepicker version, used by both modes |
 | `CDN_BASE` | `"https://cdn.jsdelivr.net/npm/jquery-datetimepicker@{version}/build/"` | CDN URL template; `{version}` is replaced with `VERSION`. Also the download source of [vendored mode](vendored.md) |
 | `VENDOR_DIR` | `None` | required for vendored mode; must be listed in `STATICFILES_DIRS` |
