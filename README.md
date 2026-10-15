@@ -3,7 +3,7 @@
 [![Tests](https://github.com/jacob-consulting/django-crud-views-extensions/actions/workflows/tests.yml/badge.svg)](https://github.com/jacob-consulting/django-crud-views-extensions/actions/workflows/tests.yml)
 [![Lint](https://github.com/jacob-consulting/django-crud-views-extensions/actions/workflows/lint.yml/badge.svg)](https://github.com/jacob-consulting/django-crud-views-extensions/actions/workflows/lint.yml)
 [![PyPI](https://img.shields.io/pypi/v/django-crud-views-extensions)](https://pypi.org/project/django-crud-views-extensions/)
-[![Docs](https://readthedocs.org/projects/django-crud-views-extensions/badge/?version=latest)](https://django-crud-views-extensions.readthedocs.io/en/latest/)
+[![Docs](https://readthedocs.org/projects/django-crud-views-extensions/badge/?version=stable)](https://django-crud-views-extensions.readthedocs.io/en/stable/)
 
 Incubator for [django-crud-views](https://github.com/jacob-consulting/django-crud-views)
 extension apps. Apps here are named as if they lived in django-crud-views itself
@@ -12,7 +12,7 @@ code changes for consuming projects.
 
 Requires django-crud-views >= 0.29.
 
-**Documentation:** <https://django-crud-views-extensions.readthedocs.io/en/latest/>
+**Documentation:** <https://django-crud-views-extensions.readthedocs.io/en/stable/>
 
 ```bash
 pip install django-crud-views-extensions
@@ -32,8 +32,8 @@ from crud_views_widget_datetimepicker.widgets import DateTimePickerInput
 widgets = {"starts_at": DateTimePickerInput()}
 ```
 
-[Getting started](https://django-crud-views-extensions.readthedocs.io/en/latest/getting_started/datetimepicker/) ·
-[Reference](https://django-crud-views-extensions.readthedocs.io/en/latest/reference/datetimepicker/widgets/)
+[Getting started](https://django-crud-views-extensions.readthedocs.io/en/stable/getting_started/datetimepicker/) ·
+[Reference](https://django-crud-views-extensions.readthedocs.io/en/stable/reference/datetimepicker/widgets/)
 
 ## crud_views_widget_typeahead
 
@@ -47,8 +47,8 @@ INSTALLED_APPS = [..., "crud_views", "crud_views_widget_typeahead"]
 urlpatterns += [path("_typeahead/", include("crud_views_widget_typeahead.urls"))]
 ```
 
-[Getting started](https://django-crud-views-extensions.readthedocs.io/en/latest/getting_started/typeahead/) ·
-[Reference](https://django-crud-views-extensions.readthedocs.io/en/latest/reference/typeahead/lookups/)
+[Getting started](https://django-crud-views-extensions.readthedocs.io/en/stable/getting_started/typeahead/) ·
+[Reference](https://django-crud-views-extensions.readthedocs.io/en/stable/reference/typeahead/lookups/)
 
 ## Example app
 
@@ -61,8 +61,8 @@ task run        # migrate, seed, runserver on :8000 — log in as admin/admin
 
 **Try it online:** the [live demo](https://django-crud-views-extensions-demo.onrender.com/) runs the example app (log in as `admin` / `admin`; data resets daily).
 
-[More about the example app](https://django-crud-views-extensions.readthedocs.io/en/latest/getting_started/example_app/)
+[More about the example app](https://django-crud-views-extensions.readthedocs.io/en/stable/getting_started/example_app/)
 
 ## Development
 
-See [Development](https://django-crud-views-extensions.readthedocs.io/en/latest/development/).
+See [Development](https://django-crud-views-extensions.readthedocs.io/en/stable/development/).
