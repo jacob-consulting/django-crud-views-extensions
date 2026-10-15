@@ -1,0 +1,58 @@
+{% load static %}
+{% load django_bootstrap5 %}
+{% load crud_views %}
+{% load i18n %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}{% translate "django-crud-views-extensions examples" %}{% endblock title %}</title>
+
+    <!-- Bootstrap CSS and JS -->
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    <!-- Font-Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <!-- jquery: required by crud_views and by the datetimepicker plugin; must precede cv_js -->
+    <script
+            src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+
+    <!-- crud_views: page-global assets, including every registered extension's (datetimepicker) -->
+    {% cv_config %}
+    {% cv_css %}
+    {% cv_js %}
+
+</head>
+
+<body>
+
+{% block nav %}
+    {% include "project/nav.html" %}
+{% endblock nav %}
+
+<main class="container">
+
+    {% bootstrap_messages %}
+
+    {% block content %}
+    {% endblock content %}
+
+</main>
+
+{% block footer %}
+    {% include "project/footer.html" %}
+{% endblock footer %}
+
+</body>
+</html>

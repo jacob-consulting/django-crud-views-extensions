@@ -1,0 +1,41 @@
+{% extends "project/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+
+    <div class="bg-body-tertiary p-4 rounded mb-4">
+        <h1>{% translate "django-crud-views-extensions examples" %}</h1>
+        <p class="lead">
+            {% blocktranslate trimmed %}One example per use case of the crud_views_widget_* extensions.
+            Every page explains what it shows and where the code is.{% endblocktranslate %}
+        </p>
+        <a class="btn btn-primary" href="{{ repo_url }}#readme">README &raquo;</a>
+    </div>
+
+    {% for group, features in feature_groups %}
+        {% if features %}
+            <h2 id="group-{{ group.key }}" class="h4 mt-4 mb-3"><i class="{{ group.icon }}" aria-hidden="true"></i> {{ group.title }}</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                {% for feature in features %}
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title"><i class="{{ feature.icon }}" aria-hidden="true"></i> {{ feature.title }}</h5>
+                                <p class="card-text">{{ feature.description }}</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-sm btn-outline-primary" href="{% url feature.url_name %}">{% translate "Open" %}</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="alert alert-info mt-4">
+        {% blocktranslate trimmed %}Log in as <code>admin/admin</code> (created by <code>manage.py seed</code>).{% endblocktranslate %}
+    </div>
+
+{% endblock content %}

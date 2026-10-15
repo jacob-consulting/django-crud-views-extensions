@@ -36,6 +36,7 @@ indent-style = "space"
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers"
+testpaths = ["tests"]
 
 [tool.coverage.run]
 source = ["crud_views_widget_datetimepicker"]

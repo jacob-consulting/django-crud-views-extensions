@@ -1,0 +1,44 @@
+{% load i18n crud_views %}
+{% load example_tags %}
+<nav class="navbar navbar-expand-xl navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url "home" %}">django-crud-views-extensions</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-xl-0">
+                {% get_feature_groups as nav_groups %}
+                {% for group, features in nav_groups.groups %}
+                    {% if features %}
+                        <li class="nav-item dropdown">
+                            <button type="button" id="nav-group-{{ group.key }}" class="nav-link dropdown-toggle{% if group.key == nav_groups.active_group %} active{% endif %}" data-bs-toggle="dropdown" aria-expanded="false"{% if group.key == nav_groups.active_group %} aria-current="true"{% endif %}>
+                                <i class="{{ group.icon }}" aria-hidden="true"></i> {{ group.title }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="nav-group-{{ group.key }}">
+                                {% for feature in features %}
+                                    <li>
+                                        <a class="dropdown-item{% if feature.title == nav_groups.active_title %} active{% endif %}"{% if feature.title == nav_groups.active_title %} aria-current="page"{% endif %} href="{% url feature.url_name %}">
+                                            <i class="{{ feature.icon }} fa-fw" aria-hidden="true"></i> {{ feature.title }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="me-3">{% cv_language_selector %}</div>
+            {% if request.user.is_authenticated %}
+                <span class="navbar-text me-3">{{ request.user.username }}</span>
+                <form class="d-flex" action="{% url "logout" %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-success" type="submit">{% translate "Log Out" %}</button>
+                </form>
+            {% else %}
+                <a class="btn btn-outline-success" href="{% url "login" %}">{% translate "Log In" %}</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

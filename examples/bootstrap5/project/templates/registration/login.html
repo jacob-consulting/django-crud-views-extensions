@@ -1,0 +1,21 @@
+{% extends "project/base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}{% translate "Log in" %} — {% translate "django-crud-views-extensions examples" %}{% endblock title %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header"><h4>{% translate "Log in" %}</h4></div>
+                <div class="card-body">
+                    {% crispy form %}
+                    <div class="alert alert-info mb-0 mt-3">
+                        Demo user: <code>admin/admin</code> — run <code>manage.py seed</code> first.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
