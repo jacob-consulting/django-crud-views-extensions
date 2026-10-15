@@ -1,0 +1,39 @@
+/* crud_views_widget_typeahead — default Bootstrap 5 skin. Show/hide uses [hidden] + .show, never inline styles. */
+.cv-typeahead {
+    position: relative;
+}
+
+.cv-typeahead-menu {
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
+.cv-typeahead-menu.show {
+    display: block;
+}
+
+.cv-typeahead-menu .dropdown-item {
+    cursor: pointer;
+    white-space: normal;
+}
+
+.cv-typeahead-menu .dropdown-item mark {
+    padding: 0;
+    color: inherit;
+    background-color: var(--bs-highlight-bg, #fff3cd);
+}
+
+.cv-typeahead-menu .dropdown-item.active mark {
+    color: inherit;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.cv-typeahead-menu .cv-typeahead-info {
+    cursor: default;
+    color: var(--bs-secondary-color);
+    font-size: 0.875em;
+}

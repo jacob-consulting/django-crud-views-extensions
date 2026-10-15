@@ -1,0 +1,10 @@
+{% with ta=widget.typeahead %}<div class="cv-typeahead" data-cv-typeahead data-url="{{ ta.url }}" data-min-chars="{{ ta.min_chars }}" data-debounce="{{ ta.debounce }}" data-submit-on-clear="{{ ta.submit_on_clear|yesno:'true,false' }}" data-i18n-more="{{ ta.i18n.more }}" data-i18n-none="{{ ta.i18n.none }}" data-i18n-count="{{ ta.i18n.count }}" data-i18n-error="{{ ta.i18n.error }}">
+  <div class="input-group">
+    <input type="text" value="{{ ta.label }}"{% include "django/forms/widgets/attrs.html" %}>
+    <button type="button" class="btn btn-outline-secondary" data-cv-typeahead-clear aria-label="{{ ta.i18n.clear }}"{% if not ta.value %} hidden{% endif %}><span aria-hidden="true">&times;</span></button>
+  </div>
+  <input type="hidden" name="{{ ta.hidden_name }}" id="{{ ta.hidden_id }}" value="{{ ta.value }}" autocomplete="off">
+  <ul id="{{ ta.listbox_id }}" class="dropdown-menu cv-typeahead-menu" role="listbox" aria-label="{{ ta.i18n.listbox }}" hidden></ul>
+  <span id="{{ ta.hint_id }}" class="visually-hidden">{{ ta.i18n.hint }}</span>
+  <span class="visually-hidden" aria-live="polite" data-cv-typeahead-status></span>
+</div>{% endwith %}

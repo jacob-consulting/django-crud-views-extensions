@@ -9,8 +9,9 @@ lived in django-crud-views itself (`crud_views_widget_*`) so a mature app can be
 into the main package with **no import changes** for consuming projects. Keep that
 constraint in mind: public import paths and settings keys are part of the contract.
 
-Currently ships one app: `crud_views_widget_datetimepicker` (form widgets wrapping the
-xdsoft jQuery DateTimePicker).
+Currently ships two apps: `crud_views_widget_datetimepicker` (form widgets wrapping the
+xdsoft jQuery DateTimePicker) and `crud_views_widget_typeahead` (server-backed type-ahead
+select: lookup registry, signed tokens, one JSON endpoint, vanilla JS).
 
 Depends on `django-crud-views >= 0.29` (the **asset registry** arrived in 0.11). There
 is no `[tool.uv.sources]` override: local dev and CI both resolve django-crud-views from
@@ -20,7 +21,7 @@ it editable (`uv pip install -e ../django-crud-views`).
 ## Commands
 
 ```bash
-uv run pytest                          # full suite (62 tests, ~0.1s)
+uv run pytest                          # full suite (161 tests, ~0.3s)
 uv run pytest tests/test_widgets.py    # one file
 uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)
@@ -85,6 +86,25 @@ time).
   `crud_views.lib.vendor.VendorSpec` from config and call `check_vendored` / `vendor`.
   The system check (id namespace `crud_views.*` — E332/E333/W330/W331) warns when
   vendored files are missing or version-mismatched.
+
+### crud_views_widget_typeahead
+
+- **`lookups.py`** — `TypeaheadLookup` (allowed set + permission in `get_queryset(request, **params)`,
+  multi-word `icontains` search, labels) and a name registry; `register_user_lookup` wraps a function.
+  `apps.py::ready()` autodiscovers every app's `typeahead.py`.
+- **`tokens.py`** — `signing.dumps({"l": name, "p": params})`, salt `crud_views.typeahead`, **no expiry**:
+  permission is re-checked per request, so the browser can neither change scope nor needs fresh tokens.
+- **`views.py`** — the single endpoint; JSON errors only (never a login redirect — `fetch` must get JSON).
+- **`fields.py` / `filters.py`** — `bind(request, **params)` is the single source of truth: it sets the
+  queryset validation uses and the token the endpoint uses. `TypeaheadBinding` is frozen plain data
+  because `Widget.__deepcopy__` is shallow. FilterSets that bind in `__init__` need
+  `do_not_call_in_templates = True` under crud_views (its list template evaluates `view.filterset_class`).
+- **`widgets.py`** — visible input has no `name`; hidden input carries the pk; `aria-describedby` is merged
+  with Django's ids at render time (never set on `widget.attrs`, or Django drops its own).
+- **`static/.../typeahead.js`** — vanilla, no `innerHTML`; the skin contract is documented in the README.
+  No CDN/vendor machinery: there is no third-party plugin.
+- Tests: `tests/testapp/typeahead.py` holds the test lookups (autodiscovered); `tests/urls.py` mounts the
+  endpoint at `/typeahead/`.
 
 ## Conventions
 

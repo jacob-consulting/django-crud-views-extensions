@@ -28,3 +28,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [path("datetimepicker/", include("datetimepicker.urls"))]
+urlpatterns += [
+    path("_typeahead/", include("crud_views_widget_typeahead.urls")),
+    path("typeahead/", include("typeahead.urls")),
+]

@@ -19,6 +19,9 @@ def pytest_configure():
             "crispy_bootstrap5",
             "crud_views.apps.CrudViewsConfig",
             "crud_views_widget_datetimepicker.apps.CrudViewsWidgetDatetimepickerConfig",
+            "django_filters",
+            "crud_views_widget_typeahead.apps.CrudViewsWidgetTypeaheadConfig",
+            "tests.testapp",
         ],
         TEMPLATES=[
             {
@@ -33,6 +36,7 @@ def pytest_configure():
             }
         ],
         STATIC_URL="/static/",
+        ROOT_URLCONF="tests.urls",
         LANGUAGE_CODE="de-de",
         USE_TZ=True,
         DATABASES={"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}},
