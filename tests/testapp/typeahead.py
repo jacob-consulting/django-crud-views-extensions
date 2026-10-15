@@ -31,6 +31,13 @@ class GroupLookup(TypeaheadLookup):
         return Group.objects.all()
 
 
+@register_lookup("testapp.groups_browse")
+class GroupBrowseLookup(GroupLookup):
+    """Like testapp.groups, but lists entries with an empty query (the select popup's browse-on-open)."""
+
+    min_chars = 0
+
+
 @register_user_lookup("testapp.users_in_g_groups")
 def users_in_g_groups(request):
     # deliberately un-distinct: a user in two matching groups appears twice
