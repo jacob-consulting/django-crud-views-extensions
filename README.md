@@ -46,9 +46,10 @@ Options: `config={...}` (any xdsoft option, e.g. `step`, `minTime`), and
 
 The picker format follows the active request language: the widget takes the first
 of the locale's `DATE_INPUT_FORMATS` / `DATETIME_INPUT_FORMATS` / `TIME_INPUT_FORMATS`
-that the picker can reproduce (time prefers a format without seconds) and renders the
+that the picker can reproduce (time and datetime prefer a format without seconds — the
+picker cannot set them) and renders the
 value with that same format, so whatever the picker writes is accepted on submit —
-e.g. `2026-10-15` under `en`, `15.10.2026` under `de`.
+e.g. `2026-10-15 19:00` under `en`, `15.10.2026 19:00` under `de`.
 
 To pin a format, pass it to the picker (`config={"format": "d.m.Y"}` or settings
 `DEFAULTS`) or to Django (`DatePickerInput(format="%d.%m.%Y")`). The widget renders and

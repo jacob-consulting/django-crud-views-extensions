@@ -90,7 +90,7 @@ class XdsoftConfigMixin:
 class DateTimePickerInput(XdsoftConfigMixin, DateTimeInput):
     """https://xdsoft.net/jqplugins/datetimepicker/ — for DateTimeField."""
 
-    fallback_format = "%Y-%m-%d %H:%M:%S"
+    fallback_format = "%Y-%m-%d %H:%M"
 
     def __init__(self, *args, fix_year=None, config=None, **kwargs):
         config = dict(config or {})
@@ -100,6 +100,9 @@ class DateTimePickerInput(XdsoftConfigMixin, DateTimeInput):
             config.setdefault("yearStart", f"{fix_year}")
             config.setdefault("yearEnd", f"{fix_year}")
         super().__init__(*args, config=config, **kwargs)
+
+    def prefers(self, fmt: str) -> bool:
+        return "%S" not in fmt  # the picker offers hours and minutes only; it would fill in the current seconds
 
 
 class DatePickerInput(XdsoftConfigMixin, DateInput):

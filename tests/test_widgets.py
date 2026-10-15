@@ -47,7 +47,7 @@ STARTS = datetime.datetime(2026, 10, 15, 19, 0, 0)
 def test_datetime_defaults():
     with translation.override("de"):
         cfg = _config(DateTimePickerInput())
-    assert cfg["format"] == "d.m.Y H:i:s"
+    assert cfg["format"] == "d.m.Y H:i"  # prefers a format without seconds: the picker cannot set them
     assert cfg["lang"] == "de"
 
 
@@ -97,9 +97,9 @@ def test_widgets_render_stock_input():
 @pytest.mark.parametrize(
     "lang, date_fmt, datetime_fmt",
     [
-        ("en", "Y-m-d", "Y-m-d H:i:s"),
-        ("de", "d.m.Y", "d.m.Y H:i:s"),
-        ("fr", "d/m/Y", "d/m/Y H:i:s"),
+        ("en", "Y-m-d", "Y-m-d H:i"),
+        ("de", "d.m.Y", "d.m.Y H:i"),
+        ("fr", "d/m/Y", "d/m/Y H:i"),
     ],
 )
 def test_format_follows_active_locale(lang, date_fmt, datetime_fmt):
@@ -107,6 +107,23 @@ def test_format_follows_active_locale(lang, date_fmt, datetime_fmt):
         assert _config(DatePickerInput())["format"] == date_fmt
         assert _config(DateTimePickerInput())["format"] == datetime_fmt
         assert _config(TimePickerInput())["format"] == "H:i"  # prefers a format without seconds
+
+
+def test_datetime_value_renders_without_seconds():
+    with translation.override("de"):
+        rendered = _rendered(DateTimePickerInput(), datetime.datetime(2026, 10, 15, 19, 0, 35))
+    assert rendered["value"] == "15.10.2026 19:00"
+
+
+def test_pinned_format_with_seconds_still_round_trips():
+    class Form(forms.Form):
+        starts_at = forms.DateTimeField(widget=DateTimePickerInput(config={"format": "Y-m-d H:i:s"}))
+
+    with translation.override("de"):
+        assert _rendered(Form().fields["starts_at"].widget, STARTS)["value"] == "2026-10-15 19:00:00"
+        bound = Form(data={"starts_at": "2026-10-15 19:00:00"})
+        assert bound.is_valid(), bound.errors
+    assert timezone.make_naive(bound.cleaned_data["starts_at"]) == STARTS
 
 
 def test_time_value_renders_without_seconds():
