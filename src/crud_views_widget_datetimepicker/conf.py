@@ -16,6 +16,7 @@ class DatetimepickerConfig:
     vendor_dir: Optional[Path] = None
     emit: bool = True
     lang: str = "en"
+    lang_explicit: bool = False  # True when LANG is set; otherwise widgets follow the active language
     defaults: dict = field(default_factory=dict)
 
 
@@ -30,5 +31,6 @@ def get_config() -> DatetimepickerConfig:
         vendor_dir=Path(vendor_dir) if vendor_dir else None,
         emit=raw.get("EMIT", True),
         lang=lang,
+        lang_explicit=bool(raw.get("LANG")),
         defaults=dict(raw.get("DEFAULTS", {})),
     )

@@ -42,6 +42,24 @@ files load from jsDelivr (CDN mode).
 Options: `config={...}` (any xdsoft option, e.g. `step`, `minTime`), and
 `DateTimePickerInput(fix_year=2026)` to lock the picker to one calendar year.
 
+### Formats and language
+
+The picker format follows the active request language: the widget takes the first
+of the locale's `DATE_INPUT_FORMATS` / `DATETIME_INPUT_FORMATS` / `TIME_INPUT_FORMATS`
+that the picker can reproduce (time prefers a format without seconds) and renders the
+value with that same format, so whatever the picker writes is accepted on submit —
+e.g. `2026-10-15` under `en`, `15.10.2026` under `de`.
+
+To pin a format, pass it to the picker (`config={"format": "d.m.Y"}` or settings
+`DEFAULTS`) or to Django (`DatePickerInput(format="%d.%m.%Y")`). The widget renders and
+parses a pinned format itself, so it works in every locale. Supported tokens:
+`d m Y y H i s`; a picker format with other tokens is passed to the picker unchanged and
+must then be accepted by the field's `input_formats`.
+
+The picker language is the active request language unless `LANG` (settings) or
+`config={"lang": ...}` sets one. The plugin's language is page-global: one field with
+its own `lang` switches every picker on that page.
+
 ### Settings
 
     CRUD_VIEWS_DATETIMEPICKER = {
@@ -50,7 +68,7 @@ Options: `config={...}` (any xdsoft option, e.g. `step`, `minTime`), and
         "CDN_BASE": "https://cdn.jsdelivr.net/npm/jquery-datetimepicker@{version}/build/",
         "VENDOR_DIR": None,     # required for vendored mode; must be on STATICFILES_DIRS
         "EMIT": True,           # False: keep registered but let a bundler deliver the files
-        "LANG": None,           # None: derived from LANGUAGE_CODE
+        "LANG": None,           # None: the active request language
         "DEFAULTS": {},         # merged into every widget's picker config
     }
 

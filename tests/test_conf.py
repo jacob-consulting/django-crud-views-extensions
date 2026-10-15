@@ -32,3 +32,10 @@ def test_explicit_settings_win(settings):
     assert cfg.emit is False
     assert cfg.lang == "en"
     assert cfg.defaults == {"step": 15}
+
+
+def test_lang_explicit_flag(settings):
+    settings.CRUD_VIEWS_DATETIMEPICKER = {}
+    assert get_config().lang_explicit is False
+    settings.CRUD_VIEWS_DATETIMEPICKER = {"LANG": "fr"}
+    assert get_config().lang_explicit is True

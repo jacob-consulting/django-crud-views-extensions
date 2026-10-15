@@ -20,7 +20,7 @@ it editable (`uv pip install -e ../django-crud-views`).
 ## Commands
 
 ```bash
-uv run pytest                          # full suite (28 tests, ~0.05s)
+uv run pytest                          # full suite (59 tests, ~0.1s)
 uv run pytest tests/test_widgets.py    # one file
 uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)
@@ -46,7 +46,8 @@ time).
 
 - **`conf.py`** — reads the `CRUD_VIEWS_DATETIMEPICKER` settings dict into a frozen
   `DatetimepickerConfig` dataclass. `SOURCE` is `"cdn"` (default) or `"vendored"`; `LANG`
-  falls back to the first segment of `LANGUAGE_CODE`. This is the only module that
+  falls back to the first segment of `LANGUAGE_CODE` (`lang_explicit` records whether it
+  was set; widgets otherwise use the active request language). This is the only module that
   touches `django.conf.settings`.
 
 - **`apps.py::ready()`** — the wiring point. Builds the bundle and calls
@@ -57,8 +58,12 @@ time).
 
 - **`widgets.py`** — `DateTimePickerInput` / `DatePickerInput` / `TimePickerInput`.
   Deliberately **no `Media` class**: widgets only serialize a merged picker config into
-  the `xdsoft-datetime-config` HTML attribute. Config merge order (low→high): class
-  `defaults` → `lang` → settings `DEFAULTS` → per-field `config`.
+  the `xdsoft-datetime-config` HTML attribute, **at render time** (per request). Config
+  merge order (low→high): class `defaults` → `lang` → settings `DEFAULTS` → per-field
+  `config`. Unless pinned, `format` is derived from the active locale's `*_INPUT_FORMATS`
+  via `formats.py` (strftime ↔ PHP tokens `d m Y y H i s`), and the widget renders and
+  parses values with that same format — the invariant is "what the picker writes, the
+  form accepts" in every locale.
 
 - **`static/.../init.js`** — reads `xdsoft-datetime-config` off matching inputs and
   activates pickers. Re-runs on the `cv:modal:loaded` event that crud-views fires after
