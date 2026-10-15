@@ -29,9 +29,11 @@ INSTALLED_APPS = [
     "crud_views_object_detail",
     "crud_views.apps.CrudViewsConfig",
     "crud_views_widget_datetimepicker.apps.CrudViewsWidgetDatetimepickerConfig",
+    "crud_views_widget_typeahead.apps.CrudViewsWidgetTypeaheadConfig",
     "project",
     # example feature apps (one per crud_views_widget_* extension)
     "datetimepicker",
+    "typeahead.apps.TypeaheadExampleConfig",
 ]
 
 MIDDLEWARE = [
@@ -113,3 +115,5 @@ CRUD_VIEWS_OBJECT_DETAIL_ICONS_TYPE = "solid"
 CRUD_VIEWS_DATETIMEPICKER = {
     "DEFAULTS": {"dayOfWeekStart": 1},  # weeks start on Monday
 }
+
+# crud_views_widget_typeahead — package defaults (EMIT=True, DEBOUNCE_MS=250); the endpoint is mounted in urls.py

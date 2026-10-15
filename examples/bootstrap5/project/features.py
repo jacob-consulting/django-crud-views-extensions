@@ -71,6 +71,25 @@ FEATURES: list[Feature] = [
         url_name="variant-list",
         icon="fa-solid fa-sliders",
     ),
+    Feature(
+        app="typeahead",
+        viewset="team",
+        group="widgets",
+        title="Typeahead: thousands of users",
+        description="A server-backed type-ahead select, scoped per team, in forms, a modal and a list filter.",
+        about=(
+            "Each team has about 500 of 3,000 seeded users: too many for a <select>. The task form's assignee is a "
+            "TypeaheadField bound to the 'typeahead.team_members' lookup with the team from the URL, so the "
+            "suggestions and the save-time validation are the same set. The task list filters by any team member "
+            "with a TypeaheadFilter. Open “Quick assign” on a task to use it inside a crud_views modal."
+        ),
+        look_at=(
+            "typeahead.py (the lookups); TaskForm.__init__ and TaskFilter.__init__ (bind) in forms.py; the "
+            "'_typeahead/' include in project/urls.py."
+        ),
+        url_name="team-list",
+        icon="fa-solid fa-magnifying-glass",
+    ),
 ]
 
 

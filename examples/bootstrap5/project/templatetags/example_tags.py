@@ -4,12 +4,16 @@ register = template.Library()
 
 
 def feature_for(view):
-    """The Feature card a view belongs to (matched by its ViewSet name), or None."""
+    """The Feature card a view belongs to (matched by its ViewSet name, then its parents'), or None."""
     from project.features import FEATURES
 
     viewset = getattr(view, "cv_viewset", None)
-    name = getattr(viewset, "name", None)
-    return next((f for f in FEATURES if f.viewset == name), None) if name else None
+    while viewset is not None:
+        feature = next((f for f in FEATURES if f.viewset == viewset.name), None)
+        if feature:
+            return feature
+        viewset = viewset.parent.viewset if viewset.parent else None
+    return None
 
 
 @register.simple_tag(takes_context=True)
