@@ -1,0 +1,7 @@
+nav:
+    - widgets.md
+    - Formats & language: formats.md
+    - settings.md
+    - Vendored mode: vendored.md
+    - django-pipeline: pipeline.md
+    - System checks: checks.md
