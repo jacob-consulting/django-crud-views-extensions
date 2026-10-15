@@ -100,3 +100,22 @@ def test_rebinding_a_copy_leaves_the_original_alone(team):
     assert field.widget.binding is original_binding
     assert list(field.queryset) == [team["member"]]
     assert list(clone.queryset) == []
+
+
+def test_to_field_name_is_rejected():
+    # the hidden input, the endpoint and validation all key on the pk; another key would break the round trip
+    with pytest.raises(ImproperlyConfigured, match="to_field_name"):
+        TypeaheadField(lookup="testapp.group_members", to_field_name="username")
+
+
+def test_duplicate_rows_in_the_lookup_queryset_still_validate(db):
+    user = User.objects.create_user("dup", first_name="Dup")
+    user.groups.add(Group.objects.create(name="g1"), Group.objects.create(name="g2"))
+
+    class DupForm(forms.Form):
+        member = TypeaheadField(lookup="testapp.users_in_g_groups")
+
+    form = DupForm({"member": str(user.pk)})
+    form.fields["member"].bind(None)
+    assert form.is_valid(), form.errors
+    assert form.cleaned_data["member"] == user

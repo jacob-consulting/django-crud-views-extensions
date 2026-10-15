@@ -29,3 +29,9 @@ class GroupLookup(TypeaheadLookup):
 
     def get_queryset(self, request, **params):
         return Group.objects.all()
+
+
+@register_user_lookup("testapp.users_in_g_groups")
+def users_in_g_groups(request):
+    # deliberately un-distinct: a user in two matching groups appears twice
+    return get_user_model().objects.filter(groups__name__startswith="g")

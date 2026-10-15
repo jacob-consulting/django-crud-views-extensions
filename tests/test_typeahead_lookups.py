@@ -87,10 +87,9 @@ def test_user_label(people):
     assert UserLookup().label(people["plain"]) == "zz_plain"
 
 
-def test_default_label_and_value(db):
+def test_default_label(db):
     group = Group.objects.create(name="x")
     assert TypeaheadLookup().label(group) == "x"
-    assert TypeaheadLookup().value(group) == str(group.pk)
 
 
 def test_defaults():
@@ -144,3 +143,8 @@ def test_register_user_lookup_with_custom_base(registry):
 def test_autodiscovery_registered_testapp_lookups():
     assert isinstance(get_lookup("testapp.group_members"), UserLookup)
     assert get_lookup("testapp.groups").search_fields == ["name"]
+
+
+def test_value_is_always_the_pk_not_a_hook():
+    # narrowed API: value() was overridable but the field validates by pk, so an override broke saving
+    assert not hasattr(TypeaheadLookup(), "value")

@@ -103,7 +103,7 @@ class TypeaheadInput(forms.Widget):
         widget["typeahead"] = {
             "url": f"{reverse('crud_views_typeahead:lookup')}?{urlencode({'t': self.binding.token})}",
             "label": lookup.label(obj) if obj is not None else "",
-            "value": lookup.value(obj) if obj is not None else "",
+            "value": str(obj.pk) if obj is not None else "",
             "hidden_name": name,
             "hidden_id": f"{text_id}_value",
             "listbox_id": f"{text_id}_listbox",

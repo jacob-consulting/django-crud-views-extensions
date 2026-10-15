@@ -32,7 +32,7 @@ def lookup_view(request):
     try:
         queryset = lookup.filter(lookup.get_queryset(request, **params), q)
         count = queryset.count()
-        results = [{"value": lookup.value(obj), "label": lookup.label(obj)} for obj in queryset[: lookup.max_results]]
+        results = [{"value": str(obj.pk), "label": lookup.label(obj)} for obj in queryset[: lookup.max_results]]
     except PermissionDenied:
         return _error("forbidden", 403)
     except Http404:

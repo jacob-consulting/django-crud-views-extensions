@@ -81,7 +81,6 @@ class TypeaheadLookup:
 
     def get_queryset(self, request, **params) -> QuerySet: ...  # allowed set + permission check
     def label(self, obj) -> str: return str(obj)
-    def value(self, obj) -> str: return str(obj.pk)
     def filter(self, queryset, q) -> QuerySet: ...
 ```
 
@@ -211,7 +210,7 @@ Rendered structure (default template):
   `attrs` (never hardcoded; no duplicates).
 - Value → text: resolve the pk via `binding.queryset.filter(pk=value).first()`,
   catching `ValueError`/`ValidationError`/`TypeError` for garbage. Resolved →
-  visible text `lookup.label(obj)`, hidden value `lookup.value(obj)`. Unresolved →
+  visible text `lookup.label(obj)`, hidden value `str(obj.pk)`. Unresolved →
   **both** empty (a garbage or out-of-scope pk is never round-tripped). This also
   re-renders the label after a validation error.
 - All user-visible strings (hint, "N more – keep typing", "No results",

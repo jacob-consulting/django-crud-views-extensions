@@ -135,8 +135,8 @@ def members(request, project):
 ```
 
 For other models, subclass `TypeaheadLookup` (`search_fields`, `ordering`, `max_results=10`, `min_chars=2`,
-`login_required=True`, `get_queryset(request, **params)`, `label(obj)`, `value(obj)`) and decorate it with
-`@register_lookup("app.name")`. Every word of the search term must match one of `search_fields`
+`login_required=True`, `get_queryset(request, **params)`, `label(obj)`) and decorate it with
+`@register_lookup("app.name")`. Values are always the pk (`to_field_name` is not supported). Every word of the search term must match one of `search_fields`
 (`icontains`). `register_user_lookup(name, base=...)` takes your own `UserLookup` subclass, e.g. to change
 the label.
 

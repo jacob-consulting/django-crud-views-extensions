@@ -28,9 +28,6 @@ class TypeaheadLookup:
     def label(self, obj) -> str:
         return str(obj)
 
-    def value(self, obj) -> str:
-        return str(obj.pk)
-
     def filter(self, queryset: QuerySet, q: str) -> QuerySet:
         words = q.split()
         if words and not self.search_fields:
