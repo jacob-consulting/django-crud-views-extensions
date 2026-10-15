@@ -1,3 +1,4 @@
 nav:
     - index.md
     - Datetimepicker: datetimepicker
+    - Typeahead: typeahead

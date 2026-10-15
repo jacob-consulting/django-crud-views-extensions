@@ -1,0 +1,9 @@
+nav:
+    - lookups.md
+    - Fields & filters: fields_filters.md
+    - widgets.md
+    - endpoint.md
+    - security.md
+    - settings.md
+    - skins.md
+    - django-pipeline: pipeline.md
