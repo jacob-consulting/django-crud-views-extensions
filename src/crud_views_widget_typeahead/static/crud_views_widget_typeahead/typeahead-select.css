@@ -1,4 +1,4 @@
-/* crud_views_widget_typeahead — select popup, Bootstrap 5 skin. Show/hide uses [hidden] + .show, never inline styles. */
+/* crud_views_widget_typeahead — select popup, Bootstrap 5 skin. Show/hide uses the [hidden] attribute, never inline styles. */
 .cv-typeahead-select {
     position: relative;
 }

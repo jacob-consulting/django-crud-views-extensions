@@ -71,6 +71,7 @@
             this.timer = null;
             this.controller = null;
             this.loadingEl = null;
+            this.errorEl = null;
             this.query = "";
             this.page = 0; // last page rendered for this.query; 0 = none
             this.count = 0;
@@ -114,6 +115,7 @@
         }
 
         onSearchKeydown(e) {
+            if (e.isComposing) return; // IME composition: Enter/Escape/arrows belong to the IME
             switch (e.key) {
                 case "ArrowDown":
                 case "ArrowUp":
@@ -135,7 +137,6 @@
 
         open(seed) {
             this.popup.hidden = false;
-            this.popup.classList.add("show");
             this.setExpanded(true);
             this.search.value = seed;
             this.search.focus();
@@ -146,7 +147,6 @@
             if (!this.isOpen()) return;
             this.cancelPending();
             this.popup.hidden = true;
-            this.popup.classList.remove("show");
             this.setExpanded(false);
             this.search.value = "";
             this.resetList();
@@ -198,6 +198,7 @@
             const q = this.query;
             const controller = new AbortController();
             this.controller = controller;
+            this.removeError();
             if (page > 1) this.loadingEl = this.info(this.root.dataset.i18nLoading);
             const sep = this.url.indexOf("?") === -1 ? "?" : "&";
             const url = this.url + sep + "q=" + encodeURIComponent(q) + "&page=" + page;
@@ -215,7 +216,7 @@
                     if (err.name === "AbortError" || this.controller !== controller) return;
                     this.controller = null;
                     this.removeLoading();
-                    this.info(this.root.dataset.i18nError);
+                    this.errorEl = this.info(this.root.dataset.i18nError);
                     this.announce(this.root.dataset.i18nError);
                     console.warn("cv-typeahead-select:", err);
                 });
@@ -262,6 +263,7 @@
             this.options = [];
             this.active = -1;
             this.loadingEl = null;
+            this.errorEl = null;
             this.search.removeAttribute("aria-activedescendant");
         }
 
@@ -275,6 +277,13 @@
             return li;
         }
 
+        removeError() {
+            if (this.errorEl) {
+                this.errorEl.remove();
+                this.errorEl = null;
+            }
+        }
+
         removeLoading() {
             if (this.loadingEl) {
                 this.loadingEl.remove();
@@ -285,10 +294,12 @@
         move(delta) {
             const n = this.options.length;
             if (!n) return;
+            const more = n < this.count; // further pages exist: never wrap onto what is merely loaded so far
             let next = this.active + delta;
-            if (next < 0) next = n - 1;
-            if (next >= n) next = 0;
+            if (next < 0) next = more ? 0 : n - 1;
+            if (next >= n) next = more ? n - 1 : 0;
             this.setActive(next);
+            if (more) this.maybeLoadMore(); // the last loaded option is now in view: fetch the next page
         }
 
         setActive(index) {

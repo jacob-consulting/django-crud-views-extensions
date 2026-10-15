@@ -17,6 +17,16 @@ def test_js_contract():
     assert "page=" in js
 
 
+def test_js_ignores_ime_composition_keys():
+    js = (STATIC / "typeahead-select.js").read_text()
+    assert "isComposing" in js
+
+
+def test_js_does_not_toggle_show_class_on_the_popup():
+    js = (STATIC / "typeahead-select.js").read_text()
+    assert '"show"' not in js
+
+
 def test_js_is_csp_and_xss_safe():
     js = (STATIC / "typeahead-select.js").read_text()
     assert "innerHTML" not in js

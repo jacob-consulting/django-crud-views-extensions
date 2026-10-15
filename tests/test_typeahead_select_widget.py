@@ -258,6 +258,7 @@ def test_skin_context_contract(team):
         "submit_on_clear",
         "i18n",
         "popup_id",
+        "label_id",
         "search_id",
         "page_size",
     }
@@ -307,3 +308,36 @@ def test_filter_with_the_popup_filters_by_pk(team):
     assert "data-cv-typeahead-select" in markup
     assert attr(root(markup), "data-submit-on-clear") == "true"
     assert attr(hidden_input(markup), "name") == "member"
+
+
+def test_listbox_is_not_a_tab_stop(team):
+    # an overflowing scroll container is keyboard-focusable in Chrome/Firefox: Tab must not land on it
+    assert attr(tag(render(team), r"<ul[^>]*>"), "tabindex") == "-1"
+
+
+def test_trigger_name_combines_field_label_and_value(team):
+    markup = render(team)
+    assert attr(trigger(markup), "aria-labelledby") == "id_member id_member_label"
+    assert attr(tag(markup, r"<span[^>]*data-cv-typeahead-select-label[^>]*>"), "id") == "id_member_label"
+
+
+def test_labelledby_consistent_with_auto_id_false(team):
+    markup = render(team, auto_id=False)
+    button = trigger(markup)
+    ids = attr(button, "aria-labelledby").split()
+    assert ids == [attr(button, "id"), f"{attr(button, 'id')}_label"]
+    assert attr(tag(markup, r"<span[^>]*data-cv-typeahead-select-label[^>]*>"), "id") == ids[1]
+
+
+def test_user_attrs_class_is_normalised(team):
+    from crud_views_widget_typeahead.widgets import TypeaheadSelect as Select
+
+    class F(forms.Form):
+        member = TypeaheadField(lookup="testapp.group_members", widget=Select(attrs={"class": "form-control extra"}))
+
+    form = F()
+    form.fields["member"].bind(None, group=str(team["group"].pk))
+    classes = attr(trigger(str(form["member"])), "class").split()
+    assert {"extra", "form-select", "text-start"} <= set(classes)
+    assert "form-control" not in classes
+    assert len(classes) == len(set(classes))

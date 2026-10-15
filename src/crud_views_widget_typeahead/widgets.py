@@ -159,12 +159,16 @@ class TypeaheadSelect(TypeaheadInput):
                 "aria-haspopup": "listbox",
                 "aria-expanded": "false",
                 "aria-controls": f"{text_id}_popup",
+                # <label for> would replace the button's content as its name: self-reference yields the label text,
+                # then the value/placeholder span (APG select-only combobox pattern)
+                "aria-labelledby": f"{text_id} {text_id}_label",
             }
         )
         lookup = get_lookup(self.binding.lookup_name)
         typeahead.update(
             {
                 "popup_id": f"{text_id}_popup",
+                "label_id": f"{text_id}_label",
                 "search_id": f"{text_id}_search",
                 "page_size": lookup.max_results,
                 "i18n": {**typeahead["i18n"], **_select_i18n(lookup.min_chars)},

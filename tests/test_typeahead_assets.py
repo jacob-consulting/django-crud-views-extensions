@@ -124,3 +124,17 @@ def test_select_config_overrides(settings):
     config = get_config()
     assert (config.select_emit, config.select_template) == (False, "x/select.html")
     assert (config.emit, config.template) == (True, DEFAULT_TEMPLATE)  # the text typeahead's keys are independent
+
+
+def test_select_emit_false_is_passed_to_the_registry(settings, monkeypatch):
+    from crud_views.lib import assets as core_assets
+    from django.apps import apps
+
+    settings.CRUD_VIEWS_TYPEAHEAD = {"SELECT_EMIT": False}
+    monkeypatch.setattr(core_assets, "_REGISTRY", {})  # isolated: ready() would otherwise collide
+    apps.get_app_config("crud_views_widget_typeahead").ready()
+    bundles = {b.key: b for b in core_assets.get_registered()}
+    assert bundles["typeahead_select"].emit is False
+    assert bundles["typeahead"].emit is True
+    assert core_assets.get_registered(only_emitting=True) is not None
+    assert "typeahead_select" not in {b.key for b in core_assets.get_registered(only_emitting=True)}
