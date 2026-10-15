@@ -12,8 +12,10 @@ constraint in mind: public import paths and settings keys are part of the contra
 Currently ships one app: `crud_views_widget_datetimepicker` (form widgets wrapping the
 xdsoft jQuery DateTimePicker).
 
-Depends on `django-crud-views >= 0.29` (the **asset registry** arrived in 0.11). During local dev, `[tool.uv.sources]` points at a sibling editable checkout
-at `../django-crud-views`; released builds use the PyPI pin in `dependencies`.
+Depends on `django-crud-views >= 0.29` (the **asset registry** arrived in 0.11). There
+is no `[tool.uv.sources]` override: local dev and CI both resolve django-crud-views from
+PyPI via `uv.lock`. To test against an unreleased sibling checkout, temporarily install
+it editable (`uv pip install -e ../django-crud-views`).
 
 ## Commands
 
