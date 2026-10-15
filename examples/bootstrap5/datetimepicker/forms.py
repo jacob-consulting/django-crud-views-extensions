@@ -1,12 +1,13 @@
 import django_filters
 from crispy_forms.layout import Layout, Row
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from crud_views.lib.crispy import Column3, Column4, Column6, CrispyModelForm
 from crud_views.lib.views.list import ListViewFilterFormHelper
 from crud_views_widget_datetimepicker.widgets import DatePickerInput, DateTimePickerInput, TimePickerInput
 
-from datetimepicker.models import Event
+from datetimepicker.models import Event, PickerVariant
 
 
 class EventForm(CrispyModelForm):
@@ -54,3 +55,28 @@ class EventFilter(django_filters.FilterSet):
 
 class EventFilterFormHelper(ListViewFilterFormHelper):
     layout = Layout(Row(Column4("day_from"), Column4("day_to"), Column4("starts_after")))
+
+
+class PickerVariantForm(CrispyModelForm):
+    """Per-field config. Merge order, lowest to highest: widget class defaults → LANG → settings DEFAULTS →
+    the config passed here. dayOfWeekStart=1 on every picker comes from CRUD_VIEWS_DATETIMEPICKER["DEFAULTS"]."""
+
+    class Meta:
+        model = PickerVariant
+        fields = ["name", "this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "fixed_times"]
+        widgets = {
+            # fix_year limits min/max date and the year dropdown to one year
+            "this_year": DateTimePickerInput(fix_year=timezone.localdate().year),
+            "quarter_hour": TimePickerInput(config={"step": 15}),
+            "no_past": DatePickerInput(config={"minDate": 0}),  # 0 = today
+            "weekdays_only": DatePickerInput(config={"disabledWeekDays": [0, 6]}),  # Sunday, Saturday
+            "inline_calendar": DatePickerInput(config={"inline": True}),
+            "fixed_times": TimePickerInput(config={"allowTimes": ["09:00", "12:00", "15:00"]}),
+        }
+
+    def get_layout_fields(self):
+        return [
+            Row(Column6("name"), Column6("this_year")),
+            Row(Column4("quarter_hour"), Column4("no_past"), Column4("weekdays_only")),
+            Row(Column6("inline_calendar"), Column6("fixed_times")),
+        ]

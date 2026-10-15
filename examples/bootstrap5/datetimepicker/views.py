@@ -17,8 +17,8 @@ from crud_views.lib.viewset import ViewSet
 from crud_views_object_detail.lib import ObjectDetailViewPermissionRequired
 from project.views import BreadcrumbMixin
 
-from datetimepicker.forms import EventFilter, EventFilterFormHelper, EventForm
-from datetimepicker.models import Event
+from datetimepicker.forms import EventFilter, EventFilterFormHelper, EventForm, PickerVariantForm
+from datetimepicker.models import Event, PickerVariant
 
 # --------------------------------------------------------------------------- Event
 
@@ -95,3 +95,61 @@ class EventDeleteView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, DeleteView
     form_class = CrispyDeleteForm
     cv_modal = True
     cv_message_template_code = _("Deleted event “{{ object }}”")
+
+
+# --------------------------------------------------------------------------- PickerVariant
+
+cv_variant = ViewSet(model=PickerVariant, name="variant", icon_header="fa-solid fa-sliders")
+
+
+class PickerVariantTable(Table):
+    id = LinkDetailColumn()
+    name = tables.Column()
+    this_year = tables.Column()
+    quarter_hour = tables.Column()
+    no_past = tables.Column()
+    weekdays_only = tables.Column()
+    fixed_times = tables.Column()
+
+
+class PickerVariantListView(BreadcrumbMixin, ListViewTableMixin, ListViewPermissionRequired):
+    cv_viewset = cv_variant
+    table_class = PickerVariantTable
+
+
+class PickerVariantDetailView(BreadcrumbMixin, ObjectDetailViewPermissionRequired):
+    cv_viewset = cv_variant
+    cv_property_display = [
+        {
+            "title": _("Picker variant"),
+            "icon": "sliders",
+            "properties": [
+                "name",
+                "this_year",
+                "quarter_hour",
+                "no_past",
+                "weekdays_only",
+                "inline_calendar",
+                "fixed_times",
+            ],
+        },
+    ]
+
+
+class PickerVariantCreateView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, CreateViewPermissionRequired):
+    cv_viewset = cv_variant
+    form_class = PickerVariantForm
+    cv_message_template_code = _("Created picker variant “{{ object }}”")
+
+
+class PickerVariantUpdateView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, UpdateViewPermissionRequired):
+    cv_viewset = cv_variant
+    form_class = PickerVariantForm
+    cv_message_template_code = _("Updated picker variant “{{ object }}”")
+
+
+class PickerVariantDeleteView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, DeleteViewPermissionRequired):
+    cv_viewset = cv_variant
+    form_class = CrispyDeleteForm
+    cv_modal = True
+    cv_message_template_code = _("Deleted picker variant “{{ object }}”")

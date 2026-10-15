@@ -7,9 +7,9 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from django.utils.html import escape  # noqa: F401 — used by the Task 3 tests appended below
+from django.utils.html import escape
 
-from datetimepicker.models import Event
+from datetimepicker.models import Event, PickerVariant
 
 #: the xdsoft (PHP-style) format tokens the widgets use, mapped to strftime
 _PHP_TOKENS = {"d": "%d", "m": "%m", "Y": "%Y", "H": "%H", "i": "%M", "s": "%S"}
@@ -196,3 +196,58 @@ class EventSeedTest(TestCase):
         self.assertGreaterEqual(count, 10)
         call_command("seed", verbosity=0)
         self.assertEqual(Event.objects.count(), count)
+
+
+class VariantTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.admin = get_user_model().objects.create_superuser(username="t-admin", password="pw")
+
+    def setUp(self):
+        self.client.force_login(self.admin)
+
+    def configs(self) -> dict:
+        html = self.client.get(reverse("variant-create")).content.decode()
+        names = ["this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "fixed_times"]
+        return {name: picker_input(html, name)["config"] for name in names}
+
+    def test_each_field_carries_its_override(self):
+        configs = self.configs()
+        year = timezone.localdate().year
+        self.assertEqual(configs["this_year"]["minDate"], f"{year}-01-01")
+        self.assertEqual(configs["this_year"]["maxDate"], f"{year}-12-31")
+        self.assertEqual(configs["quarter_hour"]["step"], 15)
+        self.assertEqual(configs["no_past"]["minDate"], 0)
+        self.assertEqual(configs["weekdays_only"]["disabledWeekDays"], [0, 6])
+        self.assertTrue(configs["inline_calendar"]["inline"])
+        self.assertEqual(configs["fixed_times"]["allowTimes"], ["09:00", "12:00", "15:00"])
+
+    def test_settings_defaults_apply_to_every_variant(self):
+        for name, config in self.configs().items():
+            self.assertEqual(config["dayOfWeekStart"], 1, name)
+
+    def test_create_with_empty_fields(self):
+        resp = self.client.post(reverse("variant-create"), {"name": "Empty"})
+        self.assertEqual(resp.status_code, 302)
+        self.assertTrue(PickerVariant.objects.filter(name="Empty").exists())
+
+    def test_about_panel_matches_card(self):
+        from project.features import FEATURES
+
+        by_viewset = {f.viewset: f for f in FEATURES}
+        variant_page = self.client.get(reverse("variant-list"))
+        event_page = self.client.get(reverse("event-list"))
+        # card copy is autoescaped in the page ("&", quotes), so compare against the escaped text
+        self.assertContains(variant_page, escape(by_viewset["variant"].about))
+        self.assertNotContains(variant_page, escape(by_viewset["event"].about))
+        self.assertContains(event_page, escape(by_viewset["event"].about))
+        self.assertNotContains(event_page, escape(by_viewset["variant"].about))
+
+
+class VariantSeedTest(TestCase):
+    def test_seed_is_idempotent(self):
+        call_command("seed", verbosity=0)
+        count = PickerVariant.objects.count()
+        self.assertGreaterEqual(count, 1)
+        call_command("seed", verbosity=0)
+        self.assertEqual(PickerVariant.objects.count(), count)

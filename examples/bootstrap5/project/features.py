@@ -55,6 +55,22 @@ FEATURES: list[Feature] = [
         url_name="event-list",
         icon="fa-regular fa-calendar",
     ),
+    Feature(
+        app="datetimepicker",
+        viewset="variant",
+        group="widgets",
+        title="Datetimepicker: per-field config",
+        description="Per-field picker options: one year only, 15-minute steps, no past dates, inline, fixed times.",
+        about=(
+            "Each field passes its own xdsoft options through the widget's config argument. Options merge from "
+            "lowest to highest: the widget class defaults, LANG, CRUD_VIEWS_DATETIMEPICKER['DEFAULTS'] (here "
+            "dayOfWeekStart=1, so every week starts on Monday), then the per-field config. fix_year is a shortcut "
+            "that sets minDate, maxDate, yearStart and yearEnd."
+        ),
+        look_at="PickerVariantForm.Meta.widgets in forms.py; CRUD_VIEWS_DATETIMEPICKER in project/settings.py.",
+        url_name="variant-list",
+        icon="fa-solid fa-sliders",
+    ),
 ]
 
 

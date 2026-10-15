@@ -2,7 +2,7 @@ import datetime
 
 from django.utils import timezone
 
-from datetimepicker.models import Event
+from datetimepicker.models import Event, PickerVariant
 
 #: (title, days from the first of this month, doors open, start, duration in hours or None)
 EVENTS = [
@@ -40,3 +40,8 @@ def seed():
                 "ends_at": starts_at + datetime.timedelta(hours=hours) if hours else None,
             },
         )
+    seed_variants()
+
+
+def seed_variants():
+    PickerVariant.objects.get_or_create(name="Example", defaults={"quarter_hour": datetime.time(9, 15)})
