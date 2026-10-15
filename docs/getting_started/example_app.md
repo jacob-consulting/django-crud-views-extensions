@@ -19,7 +19,7 @@ uv run manage.py migrate && uv run manage.py seed && uv run manage.py runserver
 ```
 
 !!! warning
-The example runs with `DEBUG` on and a published `admin`/`admin` login. Keep it on your machine.
+    The example runs with `DEBUG` on and a published `admin`/`admin` login. Keep it on your machine.
 
 ## What it shows
 

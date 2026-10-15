@@ -35,7 +35,7 @@ Responses are never cached. Other methods than `GET` get `405`.
 - `value` is the primary key as a string, `label` the lookup's `label(obj)`.
 - `count` is the number of all matches, before paging.
 - A page holds `max_results` rows; a page past the end returns `"results": []`.
-- Results are ordered by the lookup's `ordering` (else the model's `Meta.ordering`) with the primary key as the
+- Results are ordered by the lookup's `ordering` (else the queryset's own `order_by()`, else the model's `Meta.ordering`) with the primary key as the
   final tiebreaker, so pages never repeat or skip rows.
 - Terms shorter than `min_chars` return `{"results": [], "count": 0}` without a database query.
 

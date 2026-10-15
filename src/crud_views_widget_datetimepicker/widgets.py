@@ -55,7 +55,7 @@ class XdsoftConfigMixin:
         merged.update(self.picker_config)
         if "format" not in merged:
             picker_format = strftime_to_php(self.format or self.locale_format())
-            if picker_format:  # else: picker default; Django renders/parses self.format natively
+            if picker_format:  # else: picker default; Django renders with self.format, the field's input_formats parse
                 merged["format"] = picker_format
         return merged
 

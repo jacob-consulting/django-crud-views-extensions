@@ -51,7 +51,8 @@ A format using any other token (e.g. `%f`, `%b`, `%p`), or a letter in its liter
 - a pinned picker `format` with other tokens is passed to the picker unchanged — the field's
   `input_formats` must then accept what the picker writes;
 - a Django `format=` the picker cannot reproduce leaves the picker on its own default format, while Django
-  renders and parses `format` natively.
+  renders with `format`, but submitted values are parsed by the field's `input_formats`, which must then accept
+  that format (and whatever the picker writes).
 
 ## Language
 

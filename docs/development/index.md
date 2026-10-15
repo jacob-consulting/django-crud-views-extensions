@@ -48,7 +48,9 @@ locally on <http://localhost:8001>:
 uv run --no-project --with-requirements docs/requirements.txt mkdocs serve -a localhost:8001
 ```
 
-CI builds it with `mkdocs build --strict`, which fails on broken links and missing navigation entries:
+CI builds it with `mkdocs build --strict`, which fails on broken links and anchors and on `.pages` entries pointing to missing files. It does **not**
+fail on a page you forgot to list in a `.pages` file — that page is built but unreachable from the menu, so
+add every new page to its `.pages`:
 
 ```bash
 uv run --no-project --with-requirements docs/requirements.txt mkdocs build --strict
