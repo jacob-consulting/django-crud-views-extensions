@@ -1444,7 +1444,7 @@ class VariantTest(TestCase):
 
     def configs(self) -> dict:
         html = self.client.get(reverse("variant-create")).content.decode()
-        names = ["this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "german"]
+        names = ["this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "fixed_times"]
         return {name: picker_input(html, name)["config"] for name in names}
 
     def test_each_field_carries_its_override(self):
@@ -1456,7 +1456,7 @@ class VariantTest(TestCase):
         self.assertEqual(configs["no_past"]["minDate"], 0)
         self.assertEqual(configs["weekdays_only"]["disabledWeekDays"], [0, 6])
         self.assertTrue(configs["inline_calendar"]["inline"])
-        self.assertEqual(configs["german"]["lang"], "de")
+        self.assertEqual(configs["fixed_times"]["allowTimes"], ["09:00", "12:00", "15:00"])
 
     def test_settings_defaults_apply_to_every_variant(self):
         for name, config in self.configs().items():
@@ -1510,7 +1510,7 @@ class PickerVariant(models.Model):
     no_past = models.DateField(_("today or later"), null=True, blank=True)
     weekdays_only = models.DateField(_("weekdays only"), null=True, blank=True)
     inline_calendar = models.DateField(_("inline calendar"), null=True, blank=True)
-    german = models.DateField(_("German picker"), null=True, blank=True)
+    fixed_times = models.TimeField(_("fixed times"), null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -1535,7 +1535,7 @@ class PickerVariantForm(CrispyModelForm):
 
     class Meta:
         model = PickerVariant
-        fields = ["name", "this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "german"]
+        fields = ["name", "this_year", "quarter_hour", "no_past", "weekdays_only", "inline_calendar", "fixed_times"]
         widgets = {
             # fix_year limits min/max date and the year dropdown to one year
             "this_year": DateTimePickerInput(fix_year=timezone.localdate().year),
@@ -1543,14 +1543,14 @@ class PickerVariantForm(CrispyModelForm):
             "no_past": DatePickerInput(config={"minDate": 0}),  # 0 = today
             "weekdays_only": DatePickerInput(config={"disabledWeekDays": [0, 6]}),  # Sunday, Saturday
             "inline_calendar": DatePickerInput(config={"inline": True}),
-            "german": DatePickerInput(config={"lang": "de"}),  # overrides the LANG fallback
+            "fixed_times": TimePickerInput(config={"allowTimes": ["09:00", "12:00", "15:00"]}),
         }
 
     def get_layout_fields(self):
         return [
             Row(Column6("name"), Column6("this_year")),
             Row(Column4("quarter_hour"), Column4("no_past"), Column4("weekdays_only")),
-            Row(Column6("inline_calendar"), Column6("german")),
+            Row(Column6("inline_calendar"), Column6("fixed_times")),
         ]
 ```
 
@@ -1573,7 +1573,7 @@ class PickerVariantTable(Table):
     quarter_hour = tables.Column()
     no_past = tables.Column()
     weekdays_only = tables.Column()
-    german = tables.Column()
+    fixed_times = tables.Column()
 
 
 class PickerVariantListView(BreadcrumbMixin, ListViewTableMixin, ListViewPermissionRequired):
@@ -1594,7 +1594,7 @@ class PickerVariantDetailView(BreadcrumbMixin, ObjectDetailViewPermissionRequire
                 "no_past",
                 "weekdays_only",
                 "inline_calendar",
-                "german",
+                "fixed_times",
             ],
         },
     ]
@@ -1635,7 +1635,7 @@ Append to `FEATURES`:
         viewset="variant",
         group="widgets",
         title="Datetimepicker: per-field config",
-        description="Per-field picker options: one year only, 15-minute steps, no past dates, inline, language.",
+        description="Per-field picker options: one year only, 15-minute steps, no past dates, inline, fixed times.",
         about=(
             "Each field passes its own xdsoft options through the widget's config argument. Options merge from "
             "lowest to highest: the widget class defaults, LANG, CRUD_VIEWS_DATETIMEPICKER['DEFAULTS'] (here "
@@ -1749,7 +1749,7 @@ Run: `cd examples/bootstrap5 && task run` (or the uv commands), open http://loca
 - Event create/update: date, time and datetime pickers open; picking values and saving works; end ≤ start shows the error and the pickers still open afterwards.
 - Quick edit (row action): modal opens, pickers open inside it, saving closes the modal and shows the success message.
 - Delete opens a modal.
-- Per-field config create: year limited to this year, 15-minute steps, past days disabled, weekends disabled, inline calendar visible without clicking, German month names on the last field; weeks start on Monday everywhere.
+- Per-field config create: year limited to this year, 15-minute steps, past days disabled, weekends disabled, inline calendar visible without clicking, only 09:00/12:00/15:00 offered on the last field; weeks start on Monday everywhere; month names follow the language switcher.
 - Browser console: no JS errors.
 
 Report anything that fails with a screenshot; do not mark the plan done until this pass is clean.

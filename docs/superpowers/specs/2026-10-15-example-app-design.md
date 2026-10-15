@@ -36,6 +36,9 @@ Verified on 2026-10-15:
 Also, `LANG` falls back to the `LANGUAGE_CODE` *setting* at widget construction, not to
 the per-request active language.
 
+A per-field `lang` is deliberately not demonstrated: the plugin's `setLocale` is
+page-global, so one such field would switch every picker on the page.
+
 This is fixed in `crud_views_widget_datetimepicker` as its own bounded task (short
 design + approval, tests under `en-us` and `de-de`) before the example is built. The
 example's tests include a regression check for it.
@@ -125,7 +128,7 @@ everything.
 | `no_past` | `DatePickerInput(config={"minDate": 0})` |
 | `weekdays_only` | `DatePickerInput(config={"disabledWeekDays": [0, 6]})` |
 | `inline_calendar` | `DatePickerInput(config={"inline": True})` |
-| `german` | `DatePickerInput(config={"lang": "de"})` |
+| `fixed_times` | `TimePickerInput(config={"allowTimes": ["09:00", "12:00", "15:00"]})` |
 
 ViewSet `variant`: list, create, update, delete. The about panel explains the merge
 order: class defaults → `LANG` → settings `DEFAULTS` → per-field `config`.
