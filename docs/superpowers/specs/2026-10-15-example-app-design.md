@@ -30,6 +30,9 @@ Verified on 2026-10-15:
 | `de` | `15.10.2026` | `15.10.2026` | yes |
 | `en` | `2026-10-15` | `15.10.2026` | no ("Enter a valid date.") |
 
+`TimePickerInput` mismatches in every language: Django renders `18:30:00`
+(`TIME_INPUT_FORMATS[0]`), the picker format is `H:i`.
+
 Also, `LANG` falls back to the `LANGUAGE_CODE` *setting* at widget construction, not to
 the per-request active language.
 
@@ -73,7 +76,9 @@ examples/bootstrap5/
 ### `project/`
 
 - **settings.py** — trimmed from upstream: no guardian, fsm, polymorphic,
-  ordered_model, workflow or object_detail apps; no demo mode. Installs `crud_views`,
+  ordered_model or workflow apps; no demo mode. `crud_views_object_detail` *is*
+  installed (ships inside django-crud-views; the Event detail view and the table's
+  detail link need it). Installs `crud_views`,
   `crud_views_widget_datetimepicker`, `project`, `datetimepicker`. `LANGUAGES` = en, de
   with `LocaleMiddleware`. SQLite at `BASE_DIR / "db.sqlite3"`.
   `CRUD_VIEWS_DATETIMEPICKER = {"DEFAULTS": {"dayOfWeekStart": 1}}` (default CDN source).
@@ -102,8 +107,10 @@ everything.
   `clean()` rejects `ends_at <= starts_at` to demonstrate re-rendering after a
   validation error.
 - ViewSet `event`: list (table + filter), detail, create, update (full page), a
-  second update view "Quick edit" with `cv_modal = True` reached from the list row
-  actions, and delete (modal).
+  "Quick edit" view with `cv_modal = True` reached from the list row actions, and
+  delete (modal). Quick edit is a `CustomFormViewPermissionRequired` editing the
+  instance with `EventForm`: in django-crud-views 0.29 `UpdateView` does not support
+  modals (`cv_modal_supported = False`).
 - `EventFilter` — `day_from` / `day_to` (`DateFilter`, `gte`/`lte`,
   `widget=DatePickerInput()`) and `starts_after` (`DateTimeFilter`,
   `DateTimePickerInput`).

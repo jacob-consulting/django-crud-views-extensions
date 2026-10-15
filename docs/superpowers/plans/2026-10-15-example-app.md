@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- **Prerequisite:** the datetimepicker locale/format fix (spec "Prerequisite") must be merged before Task 2's locale round-trip test can pass. If it is not merged yet, stop at Task 2 Step 1's locale test and report — do not weaken the test or work around it in the example.
+- **Prerequisite:** the datetimepicker locale/format fix (spec "Prerequisite") must be merged before Task 2's locale round-trip test can pass. It must cover `TimePickerInput` as well as date/datetime, and keep picker formats within the tokens `d m Y H i s` (the test helper `php_date` maps only those). If it is not merged yet, stop at Task 2 Step 1's locale test and report — do not weaken the test or work around it in the example.
 - Location: everything example-specific lives under `examples/bootstrap5/`. Run all example commands from that directory.
 - Run commands with `uv run` (repo root `pyproject.toml` env). No new dependencies; no `[tool.uv.sources]`.
 - Asset delivery: package defaults (`SOURCE="cdn"`). `settings.py` sets only `CRUD_VIEWS_DATETIMEPICKER = {"DEFAULTS": {"dayOfWeekStart": 1}}`.
@@ -30,7 +30,7 @@
 
 ## Review Focus
 
-1. **English locale round-trip** — under `en`, a date the picker writes must be accepted by the form and filter (the bug the prerequisite fixes). Pinned in Task 2 (`test_rendered_value_matches_picker_format_and_round_trips` for `en` and `de`).
+1. **Locale round-trip** — under `en`, a date the picker writes must be accepted by the form and filter; and under *every* language the time widget's rendered value must match its picker format (today Django renders `18:30:00` against picker `H:i`, even under `de`). Both are what the prerequisite fixes. Pinned in Task 2 (`test_rendered_value_matches_picker_format_and_round_trips` for `en` and `de`, including `doors_open`).
 2. **Modal request for quick edit** — the modal partial (`X-CV-Modal: true`) must contain the picker config attribute, and a valid modal POST must answer `204` + `X-CV-Redirect`, not a 302. Pinned in Task 2.
 3. **Invalid filter input** — `?day_from=garbage` must render the list with a filter error, not a 500. Pinned in Task 2 (`test_garbage_filter_value_does_not_crash`).
 4. **Two cards, one app** — each card's about panel must show *its* text on its pages (not the first card of the app). Pinned in Task 3 (`test_about_panel_matches_card`).
@@ -111,9 +111,10 @@ Add to `pyproject.toml` (after `[tool.ruff]` sections, before `[tool.bumpversion
 testpaths = ["tests"]
 ```
 
-Append to `.gitignore`:
+Append to `.gitignore` — the file currently has **no trailing newline** (last line `.idea/`), so add a newline first; the result must end with:
 
 ```
+.idea/
 examples/**/db.sqlite3
 ```
 
@@ -129,6 +130,7 @@ from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
+from django.utils.html import escape
 
 from project.features import FEATURES
 
@@ -141,7 +143,7 @@ class ProjectTest(TestCase):
         resp = self.client.get(reverse("home"))
         self.assertEqual(resp.status_code, 200)
         for feature in FEATURES:
-            self.assertContains(resp, feature.title)
+            self.assertContains(resp, escape(feature.title))  # card copy is autoescaped (e.g. "&")
             self.assertContains(resp, reverse(feature.url_name))
 
     def test_login_page_renders(self):
@@ -902,6 +904,7 @@ from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import escape  # noqa: F401 — used by the Task 3 tests appended below
 
 from datetimepicker.models import Event
 
@@ -1470,10 +1473,11 @@ class VariantTest(TestCase):
         by_viewset = {f.viewset: f for f in FEATURES}
         variant_page = self.client.get(reverse("variant-list"))
         event_page = self.client.get(reverse("event-list"))
-        self.assertContains(variant_page, by_viewset["variant"].title)
-        self.assertNotContains(variant_page, by_viewset["event"].about)
-        self.assertContains(event_page, by_viewset["event"].title)
-        self.assertNotContains(event_page, by_viewset["variant"].about)
+        # card copy is autoescaped in the page ("&", quotes), so compare against the escaped text
+        self.assertContains(variant_page, escape(by_viewset["variant"].about))
+        self.assertNotContains(variant_page, escape(by_viewset["event"].about))
+        self.assertContains(event_page, escape(by_viewset["event"].about))
+        self.assertNotContains(event_page, escape(by_viewset["variant"].about))
 
 
 class VariantSeedTest(TestCase):
@@ -1485,7 +1489,7 @@ class VariantSeedTest(TestCase):
         self.assertEqual(PickerVariant.objects.count(), count)
 ```
 
-Then move the `from datetimepicker.models import PickerVariant` import up into the existing import block (`from datetimepicker.models import Event, PickerVariant`) and drop the `noqa` line, so ruff's import sorting passes.
+Then move the `from datetimepicker.models import PickerVariant` import up into the existing import block (`from datetimepicker.models import Event, PickerVariant`), and drop both `noqa` comments (the `PickerVariant` one and the one on `from django.utils.html import escape`, which is now used), so ruff passes.
 
 - [ ] **Step 2: Run tests to verify they fail**
 
