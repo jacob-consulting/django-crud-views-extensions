@@ -21,7 +21,7 @@ it editable (`uv pip install -e ../django-crud-views`).
 ## Commands
 
 ```bash
-uv run pytest                          # full suite (215 tests, ~0.46s)
+uv run pytest                          # full suite (223 tests, ~0.46s)
 uv run pytest tests/test_widgets.py    # one file
 uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)

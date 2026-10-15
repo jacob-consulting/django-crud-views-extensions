@@ -187,9 +187,9 @@ django-pipeline: `from crud_views_widget_typeahead.assets import source_files, s
 ### Endpoint
 
 `GET <mount>/?t=<token>&q=<term>[&page=<n>]` → `{"results": [{"value", "label"}], "count": n}` (`count` before
-truncation). `page` is 1-based with `max_results` rows per page (missing or invalid → 1); results are ordered by
-the lookup's ordering with the pk as final tiebreaker, so pages never repeat or skip rows. Errors are JSON: 400 `bad_token`, 403 `login_required` / `forbidden`,
-404 `not_found`; 405 for non-GET. Terms shorter than `min_chars` return an empty result without a query.
+truncation). `page` is 1-based with `max_results` rows per page (missing or invalid → 1); results are ordered
+by the lookup's ordering with the pk as final tiebreaker, so pages never repeat or skip rows. Errors are JSON:
+400 `bad_token`, 403 `login_required` / `forbidden`, 404 `not_found`; 405 for non-GET. Terms shorter than `min_chars` return an empty result without a query.
 
 ### Select popup
 
@@ -208,10 +208,11 @@ assignee = TypeaheadFilter(lookup="projects.members", widget=TypeaheadSelect(sub
 otherwise the popup asks for `min_chars` characters first. Keyboard: Enter, Space or ↑/↓ (or typing) opens;
 ↑/↓ move, Enter selects, Escape closes only the popup (a surrounding crud_views modal stays open); Enter never
 submits while it is open. The popup is rendered inside the widget, so it works in crud_views modals; it can be
-clipped by an ancestor with `overflow: hidden`.
+clipped by an ancestor with `overflow: hidden` and inside `modal-dialog-scrollable` modals (it is scrolled
+within the modal body).
 
 Its skin contract mirrors the one below: `SELECT_TEMPLATE` (or the widget's `template_name`) gets
-`widget.typeahead` with every key listed under Skins plus `popup_id`, `search_id`, `page_size`, and i18n keys
+`widget.typeahead` with every key listed under Skins plus `popup_id`, `label_id`, `search_id`, `page_size`, and i18n keys
 `placeholder`, `search`, `loading`, `type_more`; register your own JS/CSS and set `SELECT_EMIT = False`; keep the
 hidden-input contract and the behaviours above. Dynamically added content needs
 `window.cvTypeaheadSelect.init(container)`.

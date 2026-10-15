@@ -105,7 +105,9 @@ Template: `template_name` argument, else `CRUD_VIEWS_TYPEAHEAD["SELECT_TEMPLATE"
 `<label for>` labels it; buttons are labelable elements). The widget sets on it:
 `class` merged with `form-select text-start`, `type="button"`,
 `aria-haspopup="listbox"`, `aria-expanded="false"`, `aria-controls=<popup_id>`, and the
-merged `aria-describedby`. It drops the text typeahead's input-only attributes
+`aria-labelledby="<id> <id>_label"` (a `<label for>` would otherwise replace the button's content as its name;
+the self-reference yields the label text, then the value/placeholder span, as in the APG select-only combobox),
+and the merged `aria-describedby`. It drops the text typeahead's input-only attributes
 (`role="combobox"`, `aria-autocomplete`, `autocomplete`).
 
 `widget.typeahead` carries everything `TypeaheadInput` provides (`url`, `label`,
@@ -139,13 +141,15 @@ not used.
 div.cv-typeahead-select [data-cv-typeahead-select, data-url, data-min-chars,
                          data-debounce, data-page-size, data-submit-on-clear, data-i18n-*]
 ├─ button.form-select.text-start     (widget.attrs)
-│    └─ span [data-cv-typeahead-select-label]   label, or placeholder (muted)
+│    └─ span#<label_id> [data-cv-typeahead-select-label]   label, or placeholder (muted)
 ├─ button [data-cv-typeahead-select-clear] ×    aria-label=i18n.clear; hidden when empty
 ├─ input type=hidden name=<name> id=<hidden_id> value=<pk> autocomplete=off
-├─ div.dropdown-menu#<popup_id> [hidden]        positioned inside the root
+├─ div.cv-typeahead-select-popup#<popup_id> [hidden]   positioned inside the root; NOT .dropdown-menu
+│                                               (Bootstrap's Escape handler throws on it)
 │    ├─ input type=search id=<search_id> role=combobox aria-autocomplete=list
 │    │        aria-expanded aria-controls=<listbox_id> aria-label=i18n.search
-│    └─ ul#<listbox_id> role=listbox aria-label=i18n.listbox
+│    └─ ul#<listbox_id>.dropdown-menu.show tabindex=-1 role=listbox aria-label=i18n.listbox
+│             (made static by our CSS; tabindex=-1 keeps the scroll container out of the Tab order)
 ├─ span#<hint_id>.visually-hidden               i18n.hint
 └─ span.visually-hidden aria-live=polite [data-cv-typeahead-select-status]
 ```
@@ -193,7 +197,7 @@ The trigger is `type="button"`: it never submits the form.
 - Typing: debounced by `DEBOUNCE_MS`. A new query aborts the request in flight
   (`AbortController`) and loads page 1. Below `min_chars`, the list shows
   `i18n.type_more`; nothing is fetched.
-- ↓ / ↑: move the active option (wrapping). Sets `aria-activedescendant` on the search
+- ↓ / ↑: move the active option (wrapping only once every page is loaded; while more pages exist ↓ stays on the last loaded option and loads the next page, ↑ without an active option goes to the first). Sets `aria-activedescendant` on the search
   field, `.active` and `aria-selected="true"` on the option, scrolls it into view.
   The trigger keeps showing the committed label (no preview).
 - Enter: always `preventDefault()` (never submits while open). With an active option:
@@ -301,8 +305,9 @@ typeahead only. `TypeaheadConfig` gains `select_emit` and `select_template`.
 - Trigger label truncated with `text-overflow: ellipsis`; placeholder in Bootstrap's
   muted text colour; the clear button sits inside the trigger area, right of the label
   and left of the caret.
-- No inline styles anywhere; Bootstrap's `.form-select` and `.dropdown-menu` /
-  `.dropdown-item` carry the look. No theme dependency.
+- No inline styles anywhere; Bootstrap's `.form-select` and `.dropdown-item` carry the look; the popup
+  `div` is skinned by our own CSS (border, background, shadow-less card) and only the inner `<ul>` is a
+  (static) `.dropdown-menu`. No theme dependency.
 
 ## 5. Testing, example app, docs
 
