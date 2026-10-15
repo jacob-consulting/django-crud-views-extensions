@@ -100,10 +100,113 @@ the same path list the app uses internally — then switch off tag emission:
 Keep the order jQuery → plugin → init.js in your bundle (`source_files()` already
 returns plugin before init.js).
 
+## crud_views_widget_typeahead
+
+A server-backed type-ahead single select for large, permission-sensitive model choice sets (thousands of
+users), for forms and django-filter filters. Vanilla JS, no jQuery, CSP-safe, ARIA combobox.
+
+### Install
+
+```python
+INSTALLED_APPS = [
+    # ...
+    "crud_views.apps.CrudViewsConfig",
+    "crud_views_widget_typeahead.apps.CrudViewsWidgetTypeaheadConfig",
+]
+
+# urls.py — any prefix
+urlpatterns += [path("_typeahead/", include("crud_views_widget_typeahead.urls"))]
+```
+
+Assets reach every page through `{% cv_js %}` / `{% cv_css %}`.
+
+### Define a lookup
+
+Put lookups in your app's `typeahead.py`; it is imported automatically at startup.
+
+```python
+from crud_views_widget_typeahead.lookups import register_user_lookup
+
+@register_user_lookup("projects.members")
+def members(request, project):
+    if not request.user.has_perm("projects.view_project"):
+        raise PermissionDenied
+    return get_object_or_404(Project, pk=project).members.all()
+```
+
+For other models, subclass `TypeaheadLookup` (`search_fields`, `ordering`, `max_results=10`, `min_chars=2`,
+`login_required=True`, `get_queryset(request, **params)`, `label(obj)`, `value(obj)`) and decorate it with
+`@register_lookup("app.name")`. Every word of the search term must match one of `search_fields`
+(`icontains`). `register_user_lookup(name, base=...)` takes your own `UserLookup` subclass, e.g. to change
+the label.
+
+### Bind a form field / filter
+
+```python
+class TaskForm(forms.ModelForm):
+    assignee = TypeaheadField(lookup="projects.members")
+
+    def __init__(self, *args, request, project, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["assignee"].bind(request, project=str(project.pk))
+
+
+class TaskFilter(django_filters.FilterSet):
+    assignee = TypeaheadFilter(lookup="projects.members")
+
+    do_not_call_in_templates = True  # see below
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.filters["assignee"].bind(self.request, project=str(self.project.pk))
+```
+
+`bind()` sets the field's queryset (save-time validation) and signs `{lookup, params}` into the widget, so
+the endpoint serves exactly that set, re-checking permission on every request. Params must be JSON values
+(pass UUIDs as `str`). An unbound field raises `ImproperlyConfigured`. With crud_views' `CrispyModelForm`,
+use `self.cv_view.request` (see the example app).
+
+**crud_views list views:** the list template tests `{% if view.filterset_class %}`, and Django templates
+call callables — so the FilterSet class is instantiated there without a request. Set
+`do_not_call_in_templates = True` on a FilterSet that binds in `__init__`.
+
+### Settings
+
+| Key in `CRUD_VIEWS_TYPEAHEAD` | Default | |
+|---|---|---|
+| `EMIT` | `True` | `False` suppresses our `cv_js`/`cv_css` output (skins, django-pipeline) |
+| `TEMPLATE` | `"crud_views_widget_typeahead/typeahead.html"` | widget template |
+| `DEBOUNCE_MS` | `250` | input debounce |
+
+django-pipeline: `from crud_views_widget_typeahead.assets import source_files` (Django-free).
+
+### Endpoint
+
+`GET <mount>/?t=<token>&q=<term>` → `{"results": [{"value", "label"}], "count": n}` (`count` before
+truncation to `max_results`). Errors are JSON: 400 `bad_token`, 403 `login_required` / `forbidden`,
+404 `not_found`; 405 for non-GET. Terms shorter than `min_chars` return an empty result without a query.
+
+### Skins
+
+A design-system package replaces the frontend and keeps the server core:
+
+1. Set `CRUD_VIEWS_TYPEAHEAD["TEMPLATE"]` (or a widget's `template_name`). The template gets `widget.attrs`
+   (visible input: id, ARIA, merged `aria-describedby`) and `widget.typeahead`: `url`, `label`, `value`,
+   `hidden_name`, `hidden_id`, `listbox_id`, `hint_id`, `min_chars`, `debounce`, `submit_on_clear`, `i18n`
+   (`hint`, `more`, `none`, `count`, `error`, `clear`, `listbox`; `{n}` is the number placeholder).
+2. Register your own JS/CSS with `crud_views.lib.assets.register_assets` and set `EMIT = False`.
+3. Keep the hidden input contract (it has the `name`, carries the pk, `autocomplete="off"`, empty when
+   nothing is selected) and these behaviours: visible text = label of the stored pk except while typing
+   (restore on blur and submit; clear only via a clear button or fully emptied text); arrow keys preview text
+   only; Enter never submits while the list is open; escape/highlight labels yourself; show "N more" from
+   `count`; ARIA combobox/listbox with a live result count; re-init on `cv:modal:loaded`.
+
+Dynamically added content (e.g. new formset rows) needs `window.cvTypeahead.init(container)`.
+
 ## Example app
 
 `examples/bootstrap5/` is a local Django project with one page per use case
-(forms, modal, list filters, per-field config). It runs against the code in `src/`.
+(datetimepicker: forms, modal, list filters, per-field config; typeahead: teams and tasks with 3,000 users). It runs against the code in `src/`.
 
 ```bash
 cd examples/bootstrap5
