@@ -1,5 +1,9 @@
 # Your first datetimepicker
 
+!!! example "Try it live"
+    The [Datetimepicker: forms, modals & filters](https://django-crud-views-extensions-demo.onrender.com/datetimepicker/event/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 Given a model with date, time and datetime fields:
 
 ```python

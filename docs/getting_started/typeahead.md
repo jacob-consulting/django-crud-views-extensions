@@ -3,6 +3,10 @@
 This walkthrough builds what the [example app](example_app.md) shows: tasks belong to a team, and a task's
 assignee must be one of the team's members — of which there may be thousands.
 
+!!! example "Try it live"
+    The [Typeahead: thousands of users](https://django-crud-views-extensions-demo.onrender.com/typeahead/team/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 ## 1. Mount the endpoint
 
 ```python

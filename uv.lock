@@ -235,6 +235,7 @@ dependencies = [
 dev = [
     { name = "bump-my-version" },
     { name = "django-pipeline" },
+    { name = "pygments" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "pytest-django" },
@@ -247,6 +248,7 @@ requires-dist = [
     { name = "bump-my-version", marker = "extra == 'dev'" },
     { name = "django-crud-views", specifier = ">=0.29.0" },
     { name = "django-pipeline", marker = "extra == 'dev'" },
+    { name = "pygments", marker = "extra == 'dev'" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
     { name = "pytest-django", marker = "extra == 'dev'" },

@@ -1,5 +1,9 @@
 # Widgets
 
+!!! example "Try it live"
+    The [Datetimepicker: forms, modals & filters](https://django-crud-views-extensions-demo.onrender.com/datetimepicker/event/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 `crud_views_widget_datetimepicker` ships three form widgets wrapping the
 [xdsoft jQuery DateTimePicker](https://xdsoft.net/jqplugins/datetimepicker/):
 
@@ -52,6 +56,10 @@ Locks the picker to one calendar year: sets `minDate` to `2026-01-01`, `maxDate`
 Pins the format the value is rendered and parsed with; see [Formats & language](formats.md).
 
 ## Config merge order
+
+!!! example "Try it live"
+    The [Datetimepicker: per-field config](https://django-crud-views-extensions-demo.onrender.com/datetimepicker/variant/) example in the live demo shows per-field options and settings `DEFAULTS` in action — log in as
+    `admin` / `admin`. See [Live demo](../../getting_started/example_app.md#live-demo) for data resets and wake-up time.
 
 The picker config is merged from these sources, lowest to highest priority:
 

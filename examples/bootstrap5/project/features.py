@@ -10,6 +10,33 @@ REPO_URL = "https://github.com/jacob-consulting/django-crud-views-extensions"
 #: public demo on Render (render.yaml), linked from the footer
 DEMO_URL = "https://django-crud-views-extensions-demo.onrender.com/"
 
+#: Read the Docs version linked from the example pages and the footer. "latest" (main) until RTD activates
+#: "stable" (it does on the next release tag); then switch to "stable", which is what the demo runs.
+DOCS_BASE = "https://django-crud-views-extensions.readthedocs.io/en/latest"
+
+#: the core package the extensions build on, linked from the home page and the footer
+CRUD_VIEWS_DOCS_URL = "https://django-crud-views.readthedocs.io/en/stable/"
+CRUD_VIEWS_REPO_URL = "https://github.com/jacob-consulting/django-crud-views"
+CRUD_VIEWS_DEMO_URL = "https://django-crud-views-demo.onrender.com/"
+
+
+@dataclass(frozen=True)
+class DocRef:
+    page: str  # path under docs/, e.g. "reference/typeahead/lookups.md"
+    label: str  # English link text, deliberately not translated (like Feature.title / look_at)
+    anchor: str = ""  # heading slug on that page, e.g. "config-merge-order"
+
+    @property
+    def url(self) -> str:
+        """Read the Docs URL, following mkdocs' use_directory_urls: x/y.md -> x/y/, x/index.md -> x/."""
+        path = self.page.removesuffix(".md")
+        if path == "index" or path.endswith("/index"):
+            path = path.removesuffix("index")
+        else:
+            path += "/"
+        url = f"{DOCS_BASE}/{path}"
+        return f"{url}#{self.anchor}" if self.anchor else url
+
 
 @dataclass(frozen=True)
 class FeatureGroup:
@@ -35,6 +62,7 @@ class Feature:
     look_at: str  # one-sentence code pointer shown under the about paragraph
     url_name: str  # landing page URL name, e.g. "event-list"
     icon: str  # font-awesome classes
+    docs: tuple[DocRef, ...] = ()  # documentation sections listed under "References to documentation"
 
 
 FEATURES: list[Feature] = [
@@ -57,6 +85,16 @@ FEATURES: list[Feature] = [
         ),
         url_name="event-list",
         icon="fa-regular fa-calendar",
+        docs=(
+            DocRef(page="getting_started/datetimepicker.md", label="Your first datetimepicker"),
+            DocRef(page="reference/datetimepicker/widgets.md", label="Datetimepicker widgets"),
+            DocRef(
+                page="reference/datetimepicker/widgets.md",
+                label="Datetimepicker widgets — how it works (modals, init.js)",
+                anchor="how-it-works",
+            ),
+            DocRef(page="reference/datetimepicker/settings.md", label="Datetimepicker settings"),
+        ),
     ),
     Feature(
         app="datetimepicker",
@@ -73,6 +111,24 @@ FEATURES: list[Feature] = [
         look_at="PickerVariantForm.Meta.widgets in forms.py; CRUD_VIEWS_DATETIMEPICKER in project/settings.py.",
         url_name="variant-list",
         icon="fa-solid fa-sliders",
+        docs=(
+            DocRef(
+                page="reference/datetimepicker/widgets.md",
+                label="Datetimepicker widgets — options (config, fix_year, format)",
+                anchor="options",
+            ),
+            DocRef(
+                page="reference/datetimepicker/widgets.md",
+                label="Datetimepicker widgets — config merge order",
+                anchor="config-merge-order",
+            ),
+            DocRef(
+                page="getting_started/datetimepicker.md",
+                label="Your first datetimepicker — per-field options",
+                anchor="per-field-options",
+            ),
+            DocRef(page="reference/datetimepicker/settings.md", label="Datetimepicker settings (DEFAULTS)"),
+        ),
     ),
     Feature(
         app="typeahead",
@@ -93,6 +149,23 @@ FEATURES: list[Feature] = [
         ),
         url_name="team-list",
         icon="fa-solid fa-magnifying-glass",
+        docs=(
+            DocRef(page="getting_started/typeahead.md", label="Your first typeahead"),
+            DocRef(page="reference/typeahead/lookups.md", label="Typeahead lookups"),
+            DocRef(
+                page="reference/typeahead/fields_filters.md", label="Typeahead fields & filters — bind()", anchor="bind"
+            ),
+            DocRef(page="reference/typeahead/fields_filters.md", label="Typeahead filters", anchor="filters"),
+            DocRef(
+                page="reference/typeahead/widgets.md", label="Typeahead widgets — select popup", anchor="select-popup"
+            ),
+            DocRef(
+                page="reference/typeahead/widgets.md",
+                label="Typeahead widgets — modals and dynamic content",
+                anchor="modals-and-dynamic-content",
+            ),
+            DocRef(page="reference/typeahead/security.md", label="Typeahead security"),
+        ),
     ),
 ]
 

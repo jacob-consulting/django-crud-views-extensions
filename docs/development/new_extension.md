@@ -54,7 +54,11 @@ Before adding infrastructure, check what `crud_views.lib.*` already offers.
    and `.github/workflows/publish.yml`.
 2. Tests under `tests/`.
 3. An example app under `examples/bootstrap5/<app>/`, plus `Feature` entries in
-   `examples/bootstrap5/project/features.py` (matched to pages by `Feature.viewset`).
+   `examples/bootstrap5/project/features.py` (matched to pages by `Feature.viewset`). Fill each entry's
+   `docs=(DocRef(...), ...)`: the sections listed under "References to documentation" on its pages (the example
+   tests check that every page and anchor exists).
 4. Documentation: a getting-started walkthrough under `docs/getting_started/` and reference pages under
-   `docs/reference/<app>/`, each listed in the `.pages` files and in `docs/reference/index.md`.
+   `docs/reference/<app>/`, each listed in the `.pages` files and in `docs/reference/index.md`. Pages a feature
+   demonstrates start with a `!!! example "Try it live"` box linking its page in the live demo, and the feature
+   gets a section in `docs/getting_started/example_app.md`.
 5. A section in the README linking to the documentation.

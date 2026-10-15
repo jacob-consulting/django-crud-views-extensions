@@ -8,9 +8,17 @@
         <h1>{% translate "django-crud-views-extensions examples" %}</h1>
         <p class="lead">
             {% blocktranslate trimmed %}One example per use case of the crud_views_widget_* extensions.
-            Every page explains what it shows and where the code is.{% endblocktranslate %}
+            Every page explains what it shows, shows the code behind it and links the documentation.{% endblocktranslate %}
         </p>
-        <a class="btn btn-primary" href="{{ repo_url }}#readme">README &raquo;</a>
+        <a class="btn btn-primary" href="{{ docs_url }}">{% translate "Documentation" %} &raquo;</a>
+        <a class="btn btn-outline-primary" href="{{ repo_url }}#readme">README &raquo;</a>
+        <p class="mt-3 mb-0 text-body-secondary" id="built-on-crud-views">
+            <i class="fa-solid fa-layer-group" aria-hidden="true"></i>
+            {% translate "Built on" %} <strong>django-crud-views</strong>:
+            <a href="{{ crud_views_docs_url }}">{% translate "Documentation" %}</a> &middot;
+            <a href="{{ crud_views_repo_url }}">GitHub</a> &middot;
+            <a href="{{ crud_views_demo_url }}">{% translate "Live demo" %}</a>
+        </p>
     </div>
 
     {% for group, features in feature_groups %}

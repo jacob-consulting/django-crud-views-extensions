@@ -1,5 +1,9 @@
 # Fields & filters
 
+!!! example "Try it live"
+    The [Typeahead: thousands of users](https://django-crud-views-extensions-demo.onrender.com/typeahead/team/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 ```python
 import django_filters
 from django import forms
