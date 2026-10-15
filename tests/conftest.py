@@ -21,6 +21,7 @@ def pytest_configure():
             "crud_views_widget_datetimepicker.apps.CrudViewsWidgetDatetimepickerConfig",
             "django_filters",
             "crud_views_widget_typeahead.apps.CrudViewsWidgetTypeaheadConfig",
+            "tests.testapp",
         ],
         TEMPLATES=[
             {
