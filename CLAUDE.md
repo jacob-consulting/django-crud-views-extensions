@@ -21,7 +21,7 @@ it editable (`uv pip install -e ../django-crud-views`).
 ## Commands
 
 ```bash
-uv run pytest                          # full suite (161 tests, ~0.3s)
+uv run pytest                          # full suite (215 tests, ~0.46s)
 uv run pytest tests/test_widgets.py    # one file
 uv run pytest -k pipeline              # by keyword
 uv run ruff check . && uv run ruff format .   # lint + format (line-length 120, double quotes)
@@ -94,7 +94,9 @@ time).
   `apps.py::ready()` autodiscovers every app's `typeahead.py`.
 - **`tokens.py`** — `signing.dumps({"l": name, "p": params})`, salt `crud_views.typeahead`, **no expiry**:
   permission is re-checked per request, so the browser can neither change scope nor needs fresh tokens.
-- **`views.py`** — the single endpoint; JSON errors only (never a login redirect — `fetch` must get JSON).
+- **`views.py`** — the single endpoint; JSON errors only (never a login redirect — `fetch` must get JSON). Optional
+  1-based `page` (page size = `max_results`); `_with_pk_tiebreaker()` appends `pk` to the lookup's ordering so OFFSET
+  paging never repeats or skips rows.
 - **`fields.py` / `filters.py`** — `bind(request, **params)` is the single source of truth: it sets the
   queryset validation uses and the token the endpoint uses. `TypeaheadBinding` is frozen plain data
   because `Widget.__deepcopy__` is shallow. FilterSets that bind in `__init__` need
@@ -103,6 +105,11 @@ time).
   with Django's ids at render time (never set on `widget.attrs`, or Django drops its own).
 - **`static/.../typeahead.js`** — vanilla, no `innerHTML`; the skin contract is documented in the README.
   No CDN/vendor machinery: there is no third-party plugin.
+- **`TypeaheadSelect`** (`widgets.py`) + `typeahead_select.html` + `static/.../typeahead-select.js`/`.css` — the
+  select popup: trigger button, popup with search field and scroll-paged list, rendered inside the widget (a
+  body-level dropdown breaks under crud_views' Bootstrap 5 modal). Own asset bundle `typeahead_select` and own
+  settings `SELECT_EMIT`/`SELECT_TEMPLATE`, so a text-typeahead skin never touches it. Self-contained JS on purpose
+  (helpers duplicated from `typeahead.js`, not shared).
 - Tests: `tests/testapp/typeahead.py` holds the test lookups (autodiscovered); `tests/urls.py` mounts the
   endpoint at `/typeahead/`.
 

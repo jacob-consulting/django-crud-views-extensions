@@ -177,14 +177,44 @@ call callables — so the FilterSet class is instantiated there without a reques
 | `EMIT` | `True` | `False` suppresses our `cv_js`/`cv_css` output (skins, django-pipeline) |
 | `TEMPLATE` | `"crud_views_widget_typeahead/typeahead.html"` | widget template |
 | `DEBOUNCE_MS` | `250` | input debounce |
+| `SELECT_EMIT` | `True` | `False` suppresses the select popup's `cv_js`/`cv_css` output (skins, django-pipeline) |
+| `SELECT_TEMPLATE` | `"crud_views_widget_typeahead/typeahead_select.html"` | select popup template |
 
-django-pipeline: `from crud_views_widget_typeahead.assets import source_files` (Django-free).
+django-pipeline: `from crud_views_widget_typeahead.assets import source_files, select_source_files`
+(Django-free). `source_files()` is the text typeahead only; add `select_source_files()` if you use the popup.
+`DEBOUNCE_MS` applies to both widgets.
 
 ### Endpoint
 
-`GET <mount>/?t=<token>&q=<term>` → `{"results": [{"value", "label"}], "count": n}` (`count` before
-truncation to `max_results`). Errors are JSON: 400 `bad_token`, 403 `login_required` / `forbidden`,
+`GET <mount>/?t=<token>&q=<term>[&page=<n>]` → `{"results": [{"value", "label"}], "count": n}` (`count` before
+truncation). `page` is 1-based with `max_results` rows per page (missing or invalid → 1); results are ordered by
+the lookup's ordering with the pk as final tiebreaker, so pages never repeat or skip rows. Errors are JSON: 400 `bad_token`, 403 `login_required` / `forbidden`,
 404 `not_found`; 405 for non-GET. Terms shorter than `min_chars` return an empty result without a query.
+
+### Select popup
+
+`TypeaheadSelect` is a second widget for the same fields and filters: a trigger that looks like a Bootstrap
+`<select>`, opening a popup with a search field and a list that loads the next page when scrolled to the end.
+Choose it per field; both widgets can appear on one page.
+
+```python
+from crud_views_widget_typeahead.widgets import TypeaheadSelect
+
+assignee = TypeaheadField(lookup="projects.members", widget=TypeaheadSelect())
+assignee = TypeaheadFilter(lookup="projects.members", widget=TypeaheadSelect(submit_on_clear=True))
+```
+
+`bind()` works exactly as above. A lookup with `min_chars = 0` lists its first page as soon as the popup opens;
+otherwise the popup asks for `min_chars` characters first. Keyboard: Enter, Space or ↑/↓ (or typing) opens;
+↑/↓ move, Enter selects, Escape closes only the popup (a surrounding crud_views modal stays open); Enter never
+submits while it is open. The popup is rendered inside the widget, so it works in crud_views modals; it can be
+clipped by an ancestor with `overflow: hidden`.
+
+Its skin contract mirrors the one below: `SELECT_TEMPLATE` (or the widget's `template_name`) gets
+`widget.typeahead` with every key listed under Skins plus `popup_id`, `search_id`, `page_size`, and i18n keys
+`placeholder`, `search`, `loading`, `type_more`; register your own JS/CSS and set `SELECT_EMIT = False`; keep the
+hidden-input contract and the behaviours above. Dynamically added content needs
+`window.cvTypeaheadSelect.init(container)`.
 
 ### Skins
 
