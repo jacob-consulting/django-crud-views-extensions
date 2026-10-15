@@ -94,6 +94,9 @@ LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+# public demo (see settings_demo.py); False for local runs
+DEMO_MODE = False
+
 # django-crud-views
 CRUD_VIEWS_EXTENDS = "project/crud_views.html"
 CRUD_VIEWS_BREADCRUMB_PREFIX = [{"title": _("Home"), "url_name": "home"}]

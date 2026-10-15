@@ -1,0 +1,12 @@
+{% extends "project/base.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Too many changes" %} — {% translate "django-crud-views-extensions examples" %}{% endblock title %}
+
+{% block content %}
+    <div class="alert alert-warning mt-4">
+        <h4 class="alert-heading">{% translate "Too many changes" %}</h4>
+        <p class="mb-0">{% blocktranslate trimmed %}This public demo limits how often one visitor can save.
+            Please try again in a minute.{% endblocktranslate %}</p>
+    </div>
+{% endblock content %}

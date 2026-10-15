@@ -27,6 +27,8 @@ updated first and land in the same commit.
 4. `publish` — only when all three pass: `uv build`, then upload to PyPI via trusted publishing (OIDC, no API
    token), including provenance attestations.
 
+The same tag also deploys the [live demo](demo.md) (`.github/workflows/demo.yml`).
+
 ## Documentation
 
 Read the Docs builds `latest` from `main`. Tagged versions can be activated in the Read the Docs project

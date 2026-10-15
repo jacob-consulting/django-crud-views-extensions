@@ -3,6 +3,21 @@
 `examples/bootstrap5/` in the repository is a local Django project with one page per use case. It runs
 against the code in `src/`, so it doubles as a playground while developing.
 
+## Live demo
+
+The example app runs as a public demo at
+**[django-crud-views-extensions-demo.onrender.com](https://django-crud-views-extensions-demo.onrender.com/)**. Log in as `admin` / `admin`.
+
+Things to know:
+
+- **The data resets.** Every day at 03:00 UTC, and whenever the demo has been idle for about 15 minutes, it starts
+  again from freshly seeded data. Feel free to change and delete things.
+- **The first request after a pause can take about a minute** while the free instance wakes up.
+- **Saving is rate-limited** to 30 changes per minute and 300 per day per visitor.
+- **The Django admin is not available** on the demo.
+
+The demo normally runs the latest release.
+
 ## Run it
 
 ```bash

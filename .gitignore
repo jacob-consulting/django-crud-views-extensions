@@ -6,3 +6,5 @@ dist/
 .idea/
 examples/**/db.sqlite3
 site/
+
+examples/**/staticfiles/

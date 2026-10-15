@@ -59,6 +59,8 @@ cd examples/bootstrap5
 task run        # migrate, seed, runserver on :8000 — log in as admin/admin
 ```
 
+**Try it online:** the [live demo](https://django-crud-views-extensions-demo.onrender.com/) runs the example app (log in as `admin` / `admin`; data resets daily).
+
 [More about the example app](https://django-crud-views-extensions.readthedocs.io/en/latest/getting_started/example_app/)
 
 ## Development

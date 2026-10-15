@@ -40,4 +40,4 @@ pip install django-crud-views-extensions
 ```
 
 Then follow [Getting started](getting_started/index.md). The [example app](getting_started/example_app.md) shows
-every feature in a running project; [Development](development/index.md) covers contributing.
+every feature in a running project — or try the [live demo](https://django-crud-views-extensions-demo.onrender.com/) (log in as `admin` / `admin`); [Development](development/index.md) covers contributing.

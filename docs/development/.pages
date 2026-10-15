@@ -2,3 +2,4 @@ nav:
     - index.md
     - Adding an extension app: new_extension.md
     - Releasing: releasing.md
+    - Deploying the demo: demo.md

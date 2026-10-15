@@ -50,6 +50,10 @@ Lives in the repo's uv env (no own pyproject). Root `uv run pytest` does **not**
 add one example app plus `Feature` entries in `project/features.py` (matched to pages by
 `Feature.viewset`).
 
+The public demo on Render runs this app with `project.settings_demo` (`render.yaml`, `requirements/demo.txt`,
+`.github/workflows/demo.yml`; see `docs/development/demo.md`). Demo-only middleware (`boot.py`, `ratelimit.py`) is
+installed by `settings_demo` only, so the example's tests never import gunicorn/whitenoise/django-ratelimit.
+
 Tests need **no** `DJANGO_SETTINGS_MODULE`: `tests/conftest.py::pytest_configure` calls
 `settings.configure()` directly. It sets `LANGUAGE_CODE="de-de"` and seeds `PIPELINE={}`
 (the empty dict matters — it keeps django-pipeline's global `setting_changed` receiver

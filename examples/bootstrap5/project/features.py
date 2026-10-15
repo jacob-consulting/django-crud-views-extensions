@@ -7,6 +7,9 @@ from django.utils.translation import pgettext_lazy
 #: GitHub page linked from the footer and the home page
 REPO_URL = "https://github.com/jacob-consulting/django-crud-views-extensions"
 
+#: public demo on Render (render.yaml), linked from the footer
+DEMO_URL = "https://django-crud-views-extensions-demo.onrender.com/"
+
 
 @dataclass(frozen=True)
 class FeatureGroup:
