@@ -15,7 +15,6 @@ def pytest_configure():
             "django.contrib.auth",
             "django.contrib.staticfiles",
             "django_tables2",
-            "django_object_detail",
             "crispy_forms",
             "crispy_bootstrap5",
             "crud_views.apps.CrudViewsConfig",

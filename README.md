@@ -5,7 +5,7 @@ extension apps. Apps here are named as if they lived in django-crud-views itself
 (`crud_views_widget_*`); once mature, an app may move into the main package with no
 code changes for consuming projects.
 
-Requires django-crud-views >= 0.11 (asset registry).
+Requires django-crud-views >= 0.29.
 
 ## crud_views_widget_datetimepicker
 

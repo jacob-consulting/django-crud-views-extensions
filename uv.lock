@@ -205,7 +205,7 @@ wheels = [
 
 [[package]]
 name = "django-crud-views"
-version = "0.11.0"
+version = "0.29.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "crispy-bootstrap5" },
@@ -213,15 +213,14 @@ dependencies = [
     { name = "django-bootstrap5" },
     { name = "django-crispy-forms" },
     { name = "django-filter" },
-    { name = "django-object-detail" },
     { name = "django-tables2" },
     { name = "pydantic" },
     { name = "python-box" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c2/48/5fe4c8752e3cdaeaa38cf6a092ac09005f07f049d036ae72414ccedebc80/django_crud_views-0.11.0.tar.gz", hash = "sha256:16c900004e19d6e0f779aa210b99a06d3d41d6d3abd9a9a406aedab85eba26b9", size = 993063, upload-time = "2026-07-14T13:54:29.915Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/1e/362dbfccc537297e8e073c500c53251257d73bdf7ac47e345a04a49ace97/django_crud_views-0.29.0.tar.gz", hash = "sha256:f867a04ee814669c1bcc671b80054281dc89e4b8ca6099cdf3d0900dc073f33b", size = 2555435, upload-time = "2026-10-12T17:01:29.274Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/14/6a/b11b13be558af0d87b9834cfc01fede635409db1ce78166d48d034fc8c85/django_crud_views-0.11.0-py3-none-any.whl", hash = "sha256:0796c88a49efd75cc962f4a6c6080f27128d8217eafafa981a98c6e4450b98dd", size = 147484, upload-time = "2026-07-14T13:54:28.531Z" },
+    { url = "https://files.pythonhosted.org/packages/96/ed/dd45a65714a46afff424ffc9ce9fe44f31e792069cec9d2f92d7e9bd2af8/django_crud_views-0.29.0-py3-none-any.whl", hash = "sha256:619850723a3e347b569844d6d7e71bcb41c0aa187c491fe51c11a17da2272356", size = 214376, upload-time = "2026-10-12T17:01:27.518Z" },
 ]
 
 [[package]]
@@ -246,7 +245,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "bump-my-version", marker = "extra == 'dev'" },
-    { name = "django-crud-views", specifier = ">=0.11.0" },
+    { name = "django-crud-views", specifier = ">=0.29.0" },
     { name = "django-pipeline", marker = "extra == 'dev'" },
     { name = "pytest", marker = "extra == 'dev'" },
     { name = "pytest-cov", marker = "extra == 'dev'" },
@@ -266,19 +265,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cb/3e/563965173d4cbb5fc308087e7b3d11a115b7b67273d093622480b1e31f78/django_filter-26.1.tar.gz", hash = "sha256:66ea04031b068c77c86e1ac26ced7a3f8f13ce797f5795751707e3deefc58054", size = 144299, upload-time = "2026-07-11T09:27:02.767Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1f/01/afffed1e3c4540fb75bf550a18b6176a9f6371b5f3e52b69a28995b6480c/django_filter-26.1-py3-none-any.whl", hash = "sha256:7d98ef2899218e6242619b532cb1b95af14e09dfcf74844aecb550ad27b59ff2", size = 94069, upload-time = "2026-07-11T09:27:01.012Z" },
-]
-
-[[package]]
-name = "django-object-detail"
-version = "0.2.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django" },
-    { name = "pydantic" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/07/76dc64d1967f2312ce6bce20b388dd1aa73b1d9c2d5f9341e5db435f06f9/django_object_detail-0.2.0.tar.gz", hash = "sha256:dd4424ec6d57e60e95b6b50a4fe87f3b64288bb6c4fba150e58da5a7b7ef19b4", size = 19994, upload-time = "2026-03-10T09:19:21.281Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8b/aa/c059d97f2e06dcd0c746f15275dabcfa6a3c8fb4f6fde08edf9c8d74ef9e/django_object_detail-0.2.0-py3-none-any.whl", hash = "sha256:e792e465df9baea1d40335bb7b22561b92ba5b10c3776ef2dd2e3eb351b21ed3", size = 22433, upload-time = "2026-03-10T09:19:19.866Z" },
 ]
 
 [[package]]

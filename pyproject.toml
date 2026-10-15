@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 dependencies = [
-    "django-crud-views>=0.11.0",
+    "django-crud-views>=0.29.0",
 ]
 
 [project.optional-dependencies]
