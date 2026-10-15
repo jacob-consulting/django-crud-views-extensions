@@ -45,6 +45,7 @@ edit_uri: blob/main/docs/
 
 exclude_docs: |
     superpowers/
+    requirements.*
 
 markdown_extensions:
     - admonition
@@ -54,7 +55,7 @@ validation:
 ```
 
 Differences from the sibling: `edit_uri` uses `main` (the sibling's `master` is wrong for this repo's
-default branch) and `exclude_docs` keeps the specs/plans out of the site.
+default branch) and `exclude_docs` keeps the specs/plans and the docs requirements files out of the site.
 
 ### `docs/requirements.in` / `docs/requirements.txt`
 
