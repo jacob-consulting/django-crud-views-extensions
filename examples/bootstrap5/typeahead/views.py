@@ -131,6 +131,7 @@ class TaskPickAssigneeView(BreadcrumbMixin, CrispyViewMixin, MessageMixin, Custo
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs["instance"] = self.object
+        kwargs["auto_id"] = "pick_%s"  # the modal is open over the list: keep its ids apart from the filter's
         return kwargs
 
     def cv_form_valid(self, context: dict):
