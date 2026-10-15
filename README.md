@@ -198,7 +198,7 @@ A design-system package replaces the frontend and keeps the server core:
 3. Keep the hidden input contract (it has the `name`, carries the pk, `autocomplete="off"`, empty when
    nothing is selected) and these behaviours: visible text = label of the stored pk except while typing
    (restore on blur and submit; clear only via a clear button or fully emptied text); arrow keys preview text
-   only; Enter never submits while the list is open; escape/highlight labels yourself; show "N more" from
+   only; Enter never submits while the list is open, nor while typed text is not yet a selection; escape/highlight labels yourself; show "N more" from
    `count`; ARIA combobox/listbox with a live result count; re-init on `cv:modal:loaded`.
 
 Dynamically added content (e.g. new formset rows) needs `window.cvTypeahead.init(container)`.

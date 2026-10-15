@@ -110,6 +110,12 @@
                     if (open) {
                         e.preventDefault(); // never submit while the list is open
                         if (this.active >= 0) this.select(this.active);
+                    } else if (this.input.value.trim() !== "" && this.input.value !== this.committed) {
+                        // typed text that is not a selection (search pending or not yet run): submitting now would
+                        // silently restore and save the previous value, so search instead
+                        e.preventDefault();
+                        this.cancelPending();
+                        this.fetch();
                     }
                     break;
                 case "Escape":

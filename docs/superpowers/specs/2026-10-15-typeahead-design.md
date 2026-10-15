@@ -249,7 +249,9 @@ Behaviour contract (§5 of the input):
   clear button or by blurring with fully emptied text.
 - **Keyboard**: ↑/↓ move `aria-activedescendant` and preview the text only (pk
   unchanged); Enter with the list open selects the active option (or does nothing if
-  none) and always `preventDefault()`s; with the list closed Enter submits normally;
+  none) and always `preventDefault()`s; with the list closed Enter submits normally, unless the text is
+  non-empty and differs from the committed label (a search pending or not yet run) — then Enter runs the
+  search instead of submitting, so the previous value is never silently saved;
   Escape closes and restores; Tab closes.
 - **Blur**: closes the list, clears the debounce timer, aborts in-flight requests.
   Option list uses `mousedown` + `preventDefault` so clicking does not blur first.
