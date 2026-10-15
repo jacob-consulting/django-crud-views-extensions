@@ -52,6 +52,18 @@ def trigger(markup: str) -> str:
     return tag(markup, r'<button type="button"[^>]*aria-haspopup[^>]*>')
 
 
+def test_search_field_is_not_inside_a_bootstrap_dropdown_menu(team):
+    # Bootstrap's delegated keydown handler matches .dropdown-menu and throws on Escape
+    markup = render(team)
+    popup = tag(markup, r"<div[^>]*data-cv-typeahead-select-popup[^>]*>")
+    assert "dropdown-menu" not in (attr(popup, "class") or "")
+    listbox = tag(markup, r"<ul[^>]*>")
+    assert "dropdown-menu" in (attr(listbox, "class") or "")
+    between = markup[markup.index(popup) : markup.index(listbox)]
+    assert "dropdown-menu" not in between
+    assert 'type="search"' in between  # the search field sits in that dropdown-menu-free stretch
+
+
 def label_text(markup: str) -> str:
     return html.unescape(
         re.search(r"<span[^>]*data-cv-typeahead-select-label[^>]*>(.*?)</span>", markup, re.S).group(1)

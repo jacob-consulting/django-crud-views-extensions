@@ -30,17 +30,34 @@
     font-size: 0.65rem;
 }
 
+/* the popup is NOT a .dropdown-menu: Bootstrap's delegated keydown handler would throw on Escape inside one */
 .cv-typeahead-select-popup {
+    position: absolute;
     top: 100%;
     left: 0;
+    z-index: 1000;
     width: 100%;
+    margin-top: 0.125rem;
+    padding: 0.5rem 0;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color-translucent);
+    border-radius: var(--bs-border-radius);
 }
 
-.cv-typeahead-select-popup.show {
+.cv-typeahead-select-popup[hidden] {
+    display: none;
+}
+
+/* only the option list is a .dropdown-menu (item styling), made static, borderless and full width */
+.cv-typeahead-select-list.dropdown-menu {
+    position: static;
     display: block;
-}
-
-.cv-typeahead-select-list {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
     max-height: 20rem;
     overflow-y: auto;
 }
