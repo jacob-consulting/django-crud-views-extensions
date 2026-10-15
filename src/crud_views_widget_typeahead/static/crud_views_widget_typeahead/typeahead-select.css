@@ -1,1 +1,69 @@
-/* crud_views_widget_typeahead — select popup styles (implemented in the next task). */
+/* crud_views_widget_typeahead — select popup, Bootstrap 5 skin. Show/hide uses [hidden] + .show, never inline styles. */
+.cv-typeahead-select {
+    position: relative;
+}
+
+/* the trigger: a <button class="form-select"> that keeps room for the clear button and the caret */
+.cv-typeahead-select > .form-select {
+    display: block;
+    width: 100%;
+    padding-right: 4rem;
+}
+
+.cv-typeahead-select-label {
+    display: block;
+    min-height: 1.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.cv-typeahead-select-placeholder {
+    color: var(--bs-secondary-color);
+}
+
+.cv-typeahead-select-clear {
+    position: absolute;
+    top: 50%;
+    right: 2.25rem;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+}
+
+.cv-typeahead-select-popup {
+    top: 100%;
+    left: 0;
+    width: 100%;
+}
+
+.cv-typeahead-select-popup.show {
+    display: block;
+}
+
+.cv-typeahead-select-list {
+    max-height: 20rem;
+    overflow-y: auto;
+}
+
+.cv-typeahead-select-list .dropdown-item {
+    cursor: pointer;
+    white-space: normal;
+}
+
+.cv-typeahead-select-list .dropdown-item mark {
+    padding: 0;
+    color: inherit;
+    background-color: var(--bs-highlight-bg, #fff3cd);
+}
+
+.cv-typeahead-select-list .dropdown-item.active mark {
+    color: inherit;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.cv-typeahead-select-list .cv-typeahead-select-info {
+    cursor: default;
+    color: var(--bs-secondary-color);
+    font-size: 0.875em;
+}
