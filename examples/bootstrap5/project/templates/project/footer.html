@@ -2,7 +2,10 @@
 <footer class="container border-top mt-5 py-3 text-muted small" id="site-footer">
     <span>django-crud-views-extensions {{ extensions_version }}</span>
     &middot;
-    <span>django-crud-views {{ crud_views_version }}</span>
+    <a href="{{ crud_views_docs_url }}" class="link-secondary" target="_blank" rel="noopener">django-crud-views {{ crud_views_version }}</a>
+    &middot;
+    <a href="{{ docs_url }}" class="link-secondary" target="_blank" rel="noopener">
+        <i class="fa-solid fa-book" aria-hidden="true"></i> {% translate "Docs" %}</a>
     &middot;
     <a href="{{ repo_url }}" class="link-secondary" target="_blank" rel="noopener">
         <i class="fa-brands fa-github" aria-hidden="true"></i> GitHub</a>

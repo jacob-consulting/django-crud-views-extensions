@@ -2,3 +2,4 @@
 gunicorn>=23
 whitenoise>=6.9
 django-ratelimit>=4.1
+pygments>=2.18

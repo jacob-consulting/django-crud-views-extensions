@@ -3,6 +3,10 @@
 Two widgets in `crud_views_widget_typeahead.widgets` work with the same fields, filters, lookups and
 endpoint. Choose one per field; both can appear on one page.
 
+!!! example "Try it live"
+    The [Typeahead: thousands of users](https://django-crud-views-extensions-demo.onrender.com/typeahead/team/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 | Widget | Looks like | Use when |
 |---|---|---|
 | `TypeaheadInput` (default) | a text input with a suggestion list | users know what they're looking for |

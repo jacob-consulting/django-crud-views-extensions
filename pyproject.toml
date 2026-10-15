@@ -37,6 +37,7 @@ dev = [
     "pytest-cov",
     "ruff",
     "bump-my-version",
+    "pygments",  # example app: "The code behind this page"
 ]
 
 [build-system]

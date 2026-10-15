@@ -4,6 +4,10 @@ A lookup is one registered class per use case. It owns the **allowed set** (incl
 the **search** and the **labels**. The endpoint and the form field both resolve the lookup by name, so the
 restriction is written once.
 
+!!! example "Try it live"
+    The [Typeahead: thousands of users](https://django-crud-views-extensions-demo.onrender.com/typeahead/team/) example in the live demo shows this in action — log in as
+    `admin` / `admin`. See [Live demo](../../getting_started/example_app.md#live-demo) for data resets and wake-up time.
+
 ## Autodiscovery
 
 Put lookups in your app's `typeahead.py`. When Django starts, the typeahead app imports the `typeahead.py` of

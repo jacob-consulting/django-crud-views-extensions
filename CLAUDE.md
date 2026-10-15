@@ -48,7 +48,9 @@ cd examples/bootstrap5 && uv run pytest
 Lives in the repo's uv env (no own pyproject). Root `uv run pytest` does **not** collect it
 (`testpaths = ["tests"]`); CI runs it as a separate step. New `crud_views_widget_*` apps
 add one example app plus `Feature` entries in `project/features.py` (matched to pages by
-`Feature.viewset`).
+`Feature.viewset`). Each `Feature.docs` lists `DocRef`s rendered under "References to documentation" (a test checks
+every page and anchor exists in `docs/`); the matching docs pages carry a `!!! example "Try it live"` box linking the
+demo page. "The code behind this page" renders `SNIPPET_FILES` of `Feature.app` with pygments.
 
 The public demo on Render runs this app with `project.settings_demo` (`render.yaml`, `requirements/demo.txt`,
 `.github/workflows/demo.yml`; see `docs/development/demo.md`). Demo-only middleware (`boot.py`, `ratelimit.py`) is
