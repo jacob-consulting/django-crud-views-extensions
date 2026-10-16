@@ -138,3 +138,6 @@ time).
 - System-check and asset registry integration reuses `crud_views.lib.*` helpers rather
   than reimplementing them — check what the core package already offers before adding
   infrastructure here.
+- A Claude Code skill for this package lives in the sibling marketplace repo
+  `../skills/plugins/django-crud-views-extensions/` (released separately). A release that changes public API,
+  settings or checks also updates that skill — see `docs/development/releasing.md#claude-code-skill`.

@@ -29,6 +29,23 @@ updated first and land in the same commit.
 
 The same tag also deploys the [live demo](demo.md) (`.github/workflows/demo.yml`).
 
+## Claude Code skill
+
+The [`django-crud-views-extensions` plugin](https://github.com/jacob-consulting/skills/tree/main/plugins/django-crud-views-extensions)
+in the `jacob-consulting/skills` marketplace documents this package for Claude Code. When a release changes the
+public API, settings, system checks or recommended usage, update its `SKILL.md` and `references/` (mark new
+features `*Available since X.Y.Z*`), note it under `## [Unreleased]` in the plugin's `CHANGELOG.md`, and release the
+plugin from that repo:
+
+```bash
+scripts/release.sh django-crud-views-extensions <version> --dry-run
+scripts/release.sh django-crud-views-extensions <version>
+git push origin main --follow-tags
+```
+
+The plugin is versioned independently of this package. Bug-fix releases with no user-visible API change need no
+plugin release.
+
 ## Documentation
 
 Read the Docs builds `latest` from `main`. Tagged versions can be activated in the Read the Docs project
