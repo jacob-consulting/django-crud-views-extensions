@@ -63,8 +63,10 @@ The visible text is the label of the selected object, except while you are typin
 
 ## Modals and dynamic content
 
-Both widgets activate on `DOMContentLoaded` and again on the `cv:modal:loaded` event that crud_views
-dispatches after injecting modal content. For other dynamically added content (e.g. new formset rows) call:
+Both widgets activate on `DOMContentLoaded`, again on the `cv:modal:loaded` event that crud_views
+dispatches after injecting modal content, and on the `cv:formset:row-added` event it dispatches on every
+formset row added after page load (django-crud-views 0.29.4 and later) — so typeaheads in crud_views modals
+and in new formset rows need no extra code. For content your own JavaScript adds, call:
 
 ```javascript
 window.cvTypeahead.init(container);        // text typeahead

@@ -65,7 +65,7 @@ Behaviours:
 - Escape and highlight labels yourself — never insert server text as HTML.
 - Show "N more" from the response's `count`.
 - Use the ARIA combobox/listbox pattern with a live result count.
-- Re-initialise on `cv:modal:loaded`.
+- Re-initialise on `cv:modal:loaded` and `cv:formset:row-added` (init inside `event.target`).
 
 ## Select popup
 
@@ -89,4 +89,4 @@ window.cvTypeahead.init(container);
 window.cvTypeaheadSelect.init(container);
 ```
 
-A skin should offer the same and re-initialise on `cv:modal:loaded`.
+A skin should offer the same and re-initialise on `cv:modal:loaded` and `cv:formset:row-added`.

@@ -9,6 +9,7 @@ def test_js_contract():
     js = (STATIC / "typeahead-select.js").read_text()
     assert "[data-cv-typeahead-select]" in js
     assert "cv:modal:loaded" in js
+    assert "cv:formset:row-added" in js
     assert "window.cvTypeaheadSelect" in js
     assert "AbortController" in js
     assert "requestSubmit" in js

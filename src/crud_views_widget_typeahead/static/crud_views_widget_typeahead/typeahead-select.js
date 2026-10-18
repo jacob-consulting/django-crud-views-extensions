@@ -6,7 +6,8 @@
  * closes only the popup (a surrounding Bootstrap modal stays open). Option text is built from text nodes and <mark>
  * elements, never parsed from HTML strings; no inline styles are written.
  *
- * Activates on DOMContentLoaded and on "cv:modal:loaded" (dispatched by crud_views after injecting modal content).
+ * Activates on DOMContentLoaded, on "cv:modal:loaded" (dispatched by crud_views after injecting modal content) and on
+ * "cv:formset:row-added" (dispatched by crud_views on each formset row added after page load).
  * Call window.cvTypeaheadSelect.init(root) for other dynamically added content.
  */
 (function () {
@@ -368,6 +369,10 @@
     }
     // crud_views dispatches this (bubbling) on #cv-modal after injecting modal content
     document.addEventListener("cv:modal:loaded", function (e) {
+        init(e.target);
+    });
+    // crud_views (>= 0.29.4) dispatches this (bubbling) on each formset row added after page load
+    document.addEventListener("cv:formset:row-added", function (e) {
         init(e.target);
     });
 })();

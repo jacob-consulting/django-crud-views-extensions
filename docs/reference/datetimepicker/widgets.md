@@ -84,7 +84,9 @@ django-crud-views asset registry, so `{% cv_css %}` / `{% cv_js %}` deliver them
 At render time (per request) each widget serialises its merged config to JSON in an
 `xdsoft-datetime-config` attribute. `init.js` activates every `input[xdsoft-datetime-config]` on document
 ready, and again whenever django-crud-views dispatches `cv:modal:loaded` on `#cv-modal` after injecting
-modal content, so pickers work inside crud-views modals.
+modal content, so pickers work inside crud-views modals. It also listens for the `cv:formset:row-added` event
+that django-crud-views (0.29.4 and later) dispatches on every formset row added after page load, so pickers in
+rows added with a formset's add button work too.
 
 !!! note
     jQuery must be loaded in your base template before `{% cv_js %}` — the same rule as django-crud-views core.
