@@ -61,6 +61,7 @@ def test_init_js_content():
     init = (Path(pkg.__file__).parent / "static" / "crud_views_widget_datetimepicker" / "init.js").read_text()
     assert "xdsoft-datetime-config" in init
     assert "cv:modal:loaded" in init
+    assert "cv:formset:row-added" in init
     assert "console.log" not in init
 
 

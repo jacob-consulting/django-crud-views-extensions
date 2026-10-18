@@ -22,5 +22,10 @@
                 initPickers(modal);
             });
         }
+
+        // crud_views (>= 0.29.4) dispatches this (bubbling) on each formset row added after page load.
+        document.addEventListener("cv:formset:row-added", function (event) {
+            initPickers(event.target);
+        });
     });
 })();
