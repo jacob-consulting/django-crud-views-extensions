@@ -106,13 +106,29 @@ def test_all_tokens_used():
     assert used == set(CHAINS)
 
 
-def _documented_tokens() -> set[str]:
+_DOC_ROW = re.compile(r"\| `(--cv-[\w-]+)` \| `(--bs-[\w-]+)`, then `([^`]+)` \|")
+
+
+def _documented_tokens() -> dict[str, tuple[str, str]]:
+    """Token -> (Bootstrap fallback, hard fallback) from the table in the ``## CSS tokens`` section."""
     doc = SKINS_DOC.read_text()
     match = re.search(r"^## CSS tokens\n(.*?)(?=^## |\Z)", doc, re.S | re.M)
     assert match, "skins.md has no '## CSS tokens' section"
     rows = [line for line in match.group(1).splitlines() if line.startswith("| `--cv-")]
-    return {re.match(r"\| `(--cv-[\w-]+)`", row).group(1) for row in rows}
+    parsed = [_DOC_ROW.match(row) for row in rows]
+    assert all(parsed), f"unparseable token rows: {[r for r, m in zip(rows, parsed) if not m]}"
+    return {m.group(1): (m.group(2), m.group(3)) for m in parsed}
+
+
+def _fallbacks(chain: str) -> tuple[str, str]:
+    """``var(--cv-x, var(--bs-x, VALUE))`` -> ``("--bs-x", "VALUE")``."""
+    _, bs, hard = chain.split(", ", 2)
+    return bs.removeprefix("var("), hard.removesuffix("))")
 
 
 def test_tokens_documented():
-    assert _documented_tokens() == set(CHAINS)
+    assert set(_documented_tokens()) == set(CHAINS)
+
+
+def test_documented_fallbacks_match_css():
+    assert _documented_tokens() == {token: _fallbacks(chain) for token, chain in CHAINS.items()}
