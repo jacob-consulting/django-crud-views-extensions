@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-11-21
+
 ### Added
 - Typeahead skins read `--cv-*` CSS tokens (`--cv-secondary-color`, `--cv-body-bg`, `--cv-border-radius`,
   `--cv-border-color-translucent`, `--cv-highlight-bg`), so a theme maps one token set for crud_views and these
