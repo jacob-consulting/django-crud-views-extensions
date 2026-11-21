@@ -23,7 +23,7 @@
 .cv-typeahead-menu .dropdown-item mark {
     padding: 0;
     color: inherit;
-    background-color: var(--bs-highlight-bg, #fff3cd);
+    background-color: var(--cv-highlight-bg, var(--bs-highlight-bg, #fff3cd));
 }
 
 .cv-typeahead-menu .dropdown-item.active mark {
@@ -34,6 +34,6 @@
 
 .cv-typeahead-menu .cv-typeahead-info {
     cursor: default;
-    color: var(--bs-secondary-color);
+    color: var(--cv-secondary-color, var(--bs-secondary-color, #6c757d));
     font-size: 0.875em;
 }
