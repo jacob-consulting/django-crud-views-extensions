@@ -80,6 +80,28 @@ The same three steps, with these differences:
 - Keep the hidden-input contract and the behaviours of the [select popup](widgets.md#select-popup): paging on
   scroll, Enter never submits while open, Escape closes only the popup.
 
+## CSS tokens
+
+The stock skins read crud_views-owned `--cv-*` CSS custom properties. Each one falls back to the Bootstrap property
+of the same name and then to a fixed value, so the skins render under Bootstrap forks that rename their properties
+(CoreUI defines `--cui-*`) and with no Bootstrap variables at all. Plain Bootstrap looks the same as before.
+
+| Token | Falls back to | |
+|---|---|---|
+| `--cv-secondary-color` | `--bs-secondary-color`, then `#6c757d` | shared with crud_views |
+| `--cv-body-bg` | `--bs-body-bg`, then `#fff` | shared with crud_views |
+| `--cv-border-radius` | `--bs-border-radius`, then `.375rem` | shared with crud_views |
+| `--cv-border-color-translucent` | `--bs-border-color-translucent`, then `rgba(0, 0, 0, .175)` | typeahead only |
+| `--cv-highlight-bg` | `--bs-highlight-bg`, then `#fff3cd` | typeahead only |
+
+A theme sets the tokens on its theme roots, the same mapping it uses for crud_views; the naming rule (a token mirrors
+its Bootstrap name) and the theme-root mapping are described in
+[django-crud-views#394](https://github.com/jacob-consulting/django-crud-views/issues/394). The skins only read the
+tokens and never declare them, so nested colour-mode sections keep working.
+
+A theme that still re-defines the `--bs-*` names on `.cv-typeahead, .cv-typeahead-select` keeps working through the
+fallback. A custom skin may read the same tokens.
+
 ## JavaScript API
 
 The default frontends expose an `init(root)` function for content added after page load:

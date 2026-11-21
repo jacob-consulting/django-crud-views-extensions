@@ -104,3 +104,15 @@ def test_no_custom_property_declarations(skin):
 def test_all_tokens_used():
     used = set().union(*(_tokens_used(skin.read_text()) for skin in SKINS))
     assert used == set(CHAINS)
+
+
+def _documented_tokens() -> set[str]:
+    doc = SKINS_DOC.read_text()
+    match = re.search(r"^## CSS tokens\n(.*?)(?=^## |\Z)", doc, re.S | re.M)
+    assert match, "skins.md has no '## CSS tokens' section"
+    rows = [line for line in match.group(1).splitlines() if line.startswith("| `--cv-")]
+    return {re.match(r"\| `(--cv-[\w-]+)`", row).group(1) for row in rows}
+
+
+def test_tokens_documented():
+    assert _documented_tokens() == set(CHAINS)
