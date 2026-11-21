@@ -6,8 +6,8 @@ Releases are cut from `main` with green CI. A `v*` tag triggers the `Publish` wo
 
 ```bash
 git checkout main && git pull
-# CHANGELOG.md: rename "## [Unreleased]" to "## [0.4.0] — YYYY-MM-DD", add a fresh "## [Unreleased]"
 uv run bump-my-version bump minor --no-commit --no-tag   # or patch / major
+# then CHANGELOG.md: rename "## [Unreleased]" to "## [0.4.0] — YYYY-MM-DD", add a fresh "## [Unreleased]"
 uv lock                                                  # pick up the new version in uv.lock
 uv run pytest
 git commit -am "Bump version: 0.3.0 → 0.4.0"             # pyproject.toml and uv.lock in one commit
@@ -16,7 +16,8 @@ git push origin main v0.4.0
 ```
 
 `--no-commit --no-tag` overrides the `commit`/`tag` defaults in `[tool.bumpversion]`, so that `uv.lock` can be
-updated first and land in the same commit. The `CHANGELOG.md` edit goes into that commit too.
+updated first and land in the same commit. The `CHANGELOG.md` edit comes after the bump (bump-my-version refuses a
+dirty working tree) and goes into that commit too.
 
 ## What the tag triggers
 
